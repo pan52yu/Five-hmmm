@@ -10,7 +10,7 @@
             <el-input
               style="width: 200px"
               size="small"
-              v-model.trim="formDate.username"
+              v-model.trim="formDate.subjectName"
               placeholder="根据用户名搜索"
             ></el-input>
           </el-form>
@@ -48,36 +48,58 @@
       <!-- 表格区域 -->
       <el-row>
         <template>
-          <el-table :data="usersTableData" stripe style="width: 100%">
+          <el-table
+            :data="listTableData"
+            stripe
+            style="width: 100%"
+            :header-cell-style="{
+              backgroundColor: '#f4f4f5',
+              color: '#909399',
+              'border-bottom': '2px solid #e8e8e8'
+            }"
+          >
             <el-table-column type="index" label="序号"> </el-table-column>
-            <el-table-column prop="email" label="学科名称"> </el-table-column>
-            <el-table-column prop="phone" label="创建者"> </el-table-column>
-            <el-table-column prop="username" label="创建日期">
+            <el-table-column prop="subjectName" label="学科名称">
             </el-table-column>
-            <el-table-column prop="permission_group_title" label="前台是否显示">
-            </el-table-column>
-            <el-table-column prop="username" label="二级目录">
-            </el-table-column>
-            <el-table-column prop="username" label="标签"> </el-table-column>
-            <el-table-column prop="username" label="题目数量">
-            </el-table-column>
-            <el-table-column prop="role" label="角色"> </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column prop="username" label="创建者"> </el-table-column>
+            <el-table-column width="180px" label="创建日期">
               <template v-slot="{ row }">
-                <el-button
-                  icon="el-icon-edit"
-                  circle
-                  plain
+                {{ row.addDate | parseTimeByString }}
+              </template>
+            </el-table-column>
+            <el-table-column width="120px" label="前台是否显示">
+              <template v-slot="{ row }">
+                <span v-if="row.isFrontDisplay === 1">是</span>
+                <span v-else>否</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="twoLevelDirectory" label="二级目录">
+            </el-table-column>
+            <el-table-column prop="tags" label="标签"> </el-table-column>
+            <el-table-column prop="totals" label="题目数量"> </el-table-column>
+            <el-table-column label="操作" width="280px">
+              <template v-slot="{ row }">
+                <el-link
+                  :underline="false"
                   type="primary"
-                  @click="editBtnOk(row)"
-                ></el-button>
-                <el-button
-                  icon="el-icon-delete"
-                  circle
-                  plain
-                  type="danger"
-                  @click="delBtnOk(row)"
-                ></el-button>
+                  @click="$router.push('directorys')"
+                  >学科分类</el-link
+                >
+                <el-link
+                  :underline="false"
+                  type="primary"
+                  @click="$router.push('tags')"
+                  >学科标签</el-link
+                >
+                <el-link :underline="false" type="primary" @click="editBtn(row)"
+                  >修改</el-link
+                >
+                <el-link
+                  :underline="false"
+                  type="primary"
+                  @click="delBtn(row.id)"
+                  >删除</el-link
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -90,7 +112,7 @@
           @size-change="usersHandleSizeChange"
           @current-change="usersHandleCurrentChange"
           :current-page="formDate.page"
-          :page-sizes="[10, 15, 20, 30]"
+          :page-sizes="[3, 5, 10, 15]"
           :page-size="formDate.pagesize"
           layout=" prev, pager, next, sizes, jumper"
           :total="total"
@@ -98,25 +120,96 @@
         </el-pagination>
       </el-row>
     </el-card>
+    <!-- 新增、修改学科弹层 -->
+    <subjects-add
+      @getList="getList"
+      :subjectsDialogShow.sync="subjectsDialogShow"
+      :currentObject="currentObject"
+    ></subjects-add>
   </div>
 </template>
 
 <script>
+import { list, remove } from '@/api/hmmm/subjects.js'
+import subjectsAdd from '../components/subjects-add.vue'
+// import { parseTimeByString } from '@/filters'
 export default {
+  components: { subjectsAdd },
   name: 'List',
   data () {
     return {
+      currentObject: {},
+      subjectsDialogShow: false,
+      total: 0,
       formDate: {
         pagesize: 10,
         page: 1,
-        username: ''
-      }
+        subjectName: ''
+      },
+      listTableData: []
     }
   },
+  created () {
+    this.getList()
+  },
   methods: {
-    clearBtn () {},
-    usersBtnOk () {},
-    addClick () {}
+    async getList () {
+      const res = await list(this.formDate)
+      // console.log(res)
+      if (res.status !== 200) {
+        return this.$message.error('获取学科列表失败')
+      }
+      this.listTableData = res.data.items
+      // console.log(this.listTableData)
+      this.total = res.data.counts
+    },
+    clearBtn () {
+      this.formDate.subjectName = ''
+      this.getList()
+    },
+    usersBtnOk () {
+      this.getList()
+    },
+    addClick () {
+      this.currentObject = {
+        id: null,
+        isFrontDisplay: true
+      }
+      this.subjectsDialogShow = true
+    },
+    usersHandleSizeChange (page) {
+      this.formDate.pagesize = page
+      this.getList()
+    },
+    usersHandleCurrentChange (page) {
+      this.formDate.page = page
+      this.getList()
+    },
+    editBtn (row) {
+      row.isFrontDisplay === 1
+        ? (row.isFrontDisplay = true)
+        : (row.isFrontDisplay = false)
+      this.currentObject = row
+      this.subjectsDialogShow = true
+    },
+    async delBtn (id) {
+      const res = await this.$confirm(
+        '此操作将永久删除该文件, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }
+      ).catch(() => {
+        this.$message.info('已取消操作')
+      })
+      if (res === 'confirm') {
+        await remove({ id: id })
+        this.$message.success('删除成功')
+        this.getList()
+      }
+    }
   }
 }
 </script>
@@ -128,5 +221,9 @@ export default {
 
 .info {
   margin: 20px 0;
+}
+
+.el-link {
+  margin-right: 10px;
 }
 </style>
