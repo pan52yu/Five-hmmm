@@ -176,6 +176,7 @@ export default {
 
     // 新增
     async add() {
+      this.title = "添加";
       this.$refs.permissionsAdd.dialogFormV();
     },
     async update() {
@@ -185,7 +186,9 @@ export default {
     // 编辑
     async editPermissions(id) {
       console.log(id);
+      this.title = "编辑";
       this.$refs.permissionsAdd.dialogFormV();
+      this.$refs.permissionsAdd.hanldeEditForm(id);
     },
   },
 };
