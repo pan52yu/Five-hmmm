@@ -1,19 +1,12 @@
-# hmmm-complete
+章瑶：后台管理(用户、菜单)、学科管理（学科 ，ps:学科分类和学科标签跳转到即可）
 
-## Project setup
-```
-npm install
-```
+张梦洋：后台管理(权限、日志)、企业管理、学科管理（目录）
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+张子洋: 题库管理（精选题库+[试题录入 --> 和李佳音协作] + 组题列表）
 
-### Compiles and minifies for production
-```
-npm run build
-```
+李佳音：题库管理（基础题库+[试题录入 --> 和张子洋协作]）
+
+胡宇:主登陆、面试技巧 、学科管理（标签）、主页
 
 ### 接口地址跟路径
 
