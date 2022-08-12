@@ -37,17 +37,30 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 // 过滤器
-Object.keys(filters).forEach(key => {
+Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
 })
 
 Vue.config.productionTip = false
 
 /* eslint-disable */
+/* eslint-disable */
+/* eslint-disable */
+/* eslint-disable */
+/* eslint-disable */
 new Vue({
   el: '#app',
   router,
   store,
   i18n,
-  render: h => h(App)
+  render: (h) => h(App)
 })
+
+// //全局自定义指令
+// Vue.directive('title', {
+//   //单个修改标题
+//   inserted: function (el, binding) {
+//     // document.title = el.dataset.title
+//     document.title = 'heimamiammian'
+//   }
+// })
