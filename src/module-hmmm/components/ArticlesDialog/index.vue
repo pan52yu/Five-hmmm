@@ -21,16 +21,17 @@
     <div v-else>
       <el-form :model="dialogList" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="文章标题" prop="title">
-          <el-input v-model="dialogList.title"></el-input>
+          <el-input placeholder="请输入文章标题" v-model="dialogList.title"></el-input>
         </el-form-item>
         <el-form-item label="文章内容" prop="articleBody">
           <quill-editor
             ref="myQuillEditor"
             v-model="dialogList.articleBody"
+            :options="editorOption"
           />
         </el-form-item>
         <el-form-item label="视频地址">
-          <el-input v-model="dialogList.videoURL"></el-input>
+          <el-input placeholder="请输入视频地址" v-model="dialogList.videoURL"></el-input>
         </el-form-item>
       </el-form>
       <el-row type="flex" justify="center">
@@ -46,6 +47,12 @@
 <script>
 import { add, update } from '@/api/hmmm/articles'
 
+const toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'], // 加粗，斜体，下划线，删除线
+  [{ list: 'ordered' }, { list: 'bullet' }], // 有序列表，无序列表
+  ['blockquote', 'code-block'], // 引用，代码块
+  ['image', 'link'] // 上传图片、上传视频
+]
 export default {
   name: 'ArticlesDialog',
   props: {
@@ -84,6 +91,15 @@ export default {
             trigger: 'blur'
           }
         ]
+      },
+      editorOption: {
+        placeholder: '',
+        theme: 'snow', // 主题 snow/bubble
+        modules: {
+          toolbar: {
+            container: toolbarOptions
+          }
+        }
       }
     }
   },
@@ -97,6 +113,7 @@ export default {
     },
     // 确认修改
     async confirmTheChanges () {
+      await this.$refs.ruleForm.validate()
       try {
         if (this.type === 2) {
           // 新增操作
@@ -105,7 +122,6 @@ export default {
           })
           this.$message.success('新增成功')
         } else { // 修改操作
-          await this.$refs.ruleForm.validate()
           await update(this.dialogList)
           this.$message.success('修改成功')
         }
@@ -140,4 +156,7 @@ export default {
   overflow: hidden;
 }
 
+/deep/ .ql-editor {
+  min-height: 200px;
+}
 </style>
