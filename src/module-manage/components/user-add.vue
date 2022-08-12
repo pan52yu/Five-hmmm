@@ -18,7 +18,7 @@
         <el-form-item
           :label="$t('table.paddword')"
           prop="password"
-          v-if="formBase.password!=undefined"
+          v-if="formBase.password!==undefined"
         >
           <el-input v-model="formBase.password"></el-input>
         </el-form-item>
@@ -29,7 +29,7 @@
         </el-form-item>
         <!-- 权限组 -->
         <el-form-item :label="$t('table.permissionUser')" prop="permission_group_id">
-          <el-select class="filter-item" v-model="formBase.permission_group_id">
+          <el-select class="filter-item" v-model="formBase.permission_group_id" value="">
             <el-option
               v-for="item in PermissionGroupsList"
               :value="item.id"
@@ -124,7 +124,7 @@ export default {
             })
           }
         } else {
-          this.$Message.error('*号为必填项!')
+          this.$message.error('*号为必填项!')
         }
       })
     }

@@ -1,4 +1,5 @@
 import Layout from '@/module-dashboard/pages/layout'
+
 const _import = require('@/router/import_' + process.env.NODE_ENV)
 
 export default [
@@ -29,6 +30,12 @@ export default [
         name: 'base-permissions',
         component: _import('manage/pages/permissions'),
         meta: { title: '权限', noCache: true, icon: 'component' }
+      },
+      {
+        path: 'logs',
+        name: 'base-logs',
+        component: _import('manage/pages/logs'),
+        meta: { title: '日志', noCache: true, icon: 'component' }
       }
     ]
   }

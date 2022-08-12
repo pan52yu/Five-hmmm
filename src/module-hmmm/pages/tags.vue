@@ -40,6 +40,10 @@
       <!--   表格区域   -->
       <el-table
         :data="tableData"
+        :header-cell-style="{
+          'background-color': '#fafafa',
+          'border-bottom': '2px solid #e8e8e8',
+        }"
         style="width: 100%">
         <el-table-column type="index" label="序号" width="80px"></el-table-column>
         <el-table-column

@@ -34,12 +34,16 @@
         :closable="false"
         show-icon>
         <template>
-          数据一共{{ total }}条
+          <span>数据一共{{ total }}条</span>
         </template>
       </el-alert>
       <!--   表格区域   -->
       <el-table
         :data="tableData"
+        :header-cell-style="{
+          'background-color': '#fafafa',
+          'border-bottom': '2px solid #e8e8e8',
+        }"
         style="width: 100%">
         <el-table-column type="index" label="序号" width="80px"></el-table-column>
         <el-table-column
@@ -271,4 +275,14 @@ export default {
 /deep/ .el-card__body {
   padding-right: 0;
 }
+
+/deep/ .el-icon-info {
+  font-size: 16px;
+}
+
+/deep/ .el-alert__description {
+  margin-top: 0;
+  font-size: 13px;
+}
+
 </style>
