@@ -17,9 +17,9 @@
         <!-- 搜索取消按钮 -->
         <el-col>
           <el-button size="small" @click="clearBtn">清空</el-button>
-          <el-button size="small" type="primary" @click="usersBtnOk"
-            >搜索</el-button
-          >
+          <el-button size="small" type="primary" @click="usersBtnOk">{{
+            $t('table.search')
+          }}</el-button>
         </el-col>
         <!-- 新增用户按钮 -->
         <el-col :span="3">
@@ -28,7 +28,7 @@
             icon="el-icon-edit"
             size="small"
             @click="addClick"
-            >新增用户</el-button
+            >{{ $t('table.addUser') }}</el-button
           >
         </el-col>
       </el-row>
@@ -105,23 +105,23 @@
         ref="usersRuleRef"
         label-width="100px"
       >
-        <el-form-item label="用户名" prop="username">
+        <el-form-item :label="$t('table.username')" prop="username">
           <el-input v-model="usersRuleForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item :label="$t('table.email')" prop="email">
           <el-input v-model="usersRuleForm.email"></el-input>
         </el-form-item>
         <el-form-item
-          label="密码"
+          :label="$t('table.paddword')"
           prop="password"
           v-if="usersRuleForm.password != undefined"
         >
           <el-input v-model="usersRuleForm.password"></el-input>
         </el-form-item>
-        <el-form-item label="角色">
+        <el-form-item :label="$t('table.role')">
           <el-input v-model="usersRuleForm.role"></el-input>
         </el-form-item>
-        <el-form-item label="权限组名称">
+        <el-form-item :label="$t('table.permissionUser')">
           <!-- <el-input v-model="usersRuleForm.permission_group_title"></el-input> -->
           <el-select
             v-model="usersRuleForm.permission_group_id"
@@ -136,10 +136,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="联系电话">
+        <el-form-item :label="$t('table.phone')">
           <el-input v-model="usersRuleForm.phone"></el-input>
         </el-form-item>
-        <el-form-item label="介绍">
+        <el-form-item :label="$t('table.introduction')">
           <el-input
             type="textarea"
             :rows="2"
@@ -150,10 +150,12 @@
       </el-form>
       <!-- 取消、确认按钮 -->
       <el-row type="flex" justify="center">
-        <el-button size="small" @click="close">取消</el-button>
-        <el-button size="small" type="primary" @click="addBtnOk"
-          >确定</el-button
-        >
+        <el-button size="small" @click="close">{{
+          $t('table.cancel')
+        }}</el-button>
+        <el-button size="small" type="primary" @click="addBtnOk">{{
+          $t('table.confirm')
+        }}</el-button>
       </el-row>
     </el-dialog>
   </div>
@@ -295,7 +297,7 @@ export default {
         await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'info'
         })
         await remove({ id: row.id })
         this.$message.success('删除成功!')
