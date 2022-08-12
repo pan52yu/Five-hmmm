@@ -36,7 +36,7 @@ Vue.use(Element, {
   size: 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)
 })
-// 过滤器
+// 时间过滤器
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
 })

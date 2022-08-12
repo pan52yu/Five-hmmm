@@ -1,49 +1,51 @@
 <template>
   <div class="add-form">
     <el-dialog :title="text+pageTitle" :visible.sync="dialogFormVisible">
-    <el-form :rules="ruleInline" ref="formMenu" :model="formMenu" label-position="left" label-width="120px" style='width: 400px; margin-left:120px;'>
-          <el-form-item :label="$t('table.permissionUser')">
-              <el-radio-group v-model="type" class="choose-type" @change="handleChooseType">
-                <el-radio label="menu" class="choose-item" :disabled="typeStatus">菜单</el-radio>
-                <el-radio label="points" class="choose-item" :disabled="typeStatus">权限点</el-radio>
-              </el-radio-group>
+      <el-form :rules="ruleInline" ref="formMenu" :model="formMenu" label-position="left" label-width="120px"
+               style='width: 400px; margin-left:120px;'>
+        <el-form-item :label="$t('table.permissionUser')">
+          <el-radio-group v-model="type" class="choose-type" @change="handleChooseType">
+            <el-radio label="menu" class="choose-item" :disabled="typeStatus">菜单</el-radio>
+            <el-radio label="points" class="choose-item" :disabled="typeStatus">权限点</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('table.permissionUser')">
+          <el-select v-model="formMenu.pid" value="">
+            <el-option :value="0" :label="$t('table.powerNav')">主导航</el-option>
+            <el-option v-for="(items) in notPointDataList" :value="items.id" :key="items.id" :label="items.title"
+                       :disabled="(type === 'points') && !!(items.childs)" :class="'moveIn'+items.layer">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <div v-if="showMenuBlock">
+          <el-form-item :label="$t('table.powerCode')" prop="code">
+            <el-input v-model="formMenu.code"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('table.permissionUser')">
-              <el-select v-model="formMenu.pid">
-                <el-option :value="0" :label="$t('table.powerNav')">主导航</el-option>
-                <el-option v-for="(items) in notPointDataList" :value="items.id" :key="items.id" :label="items.title" :disabled="(type === 'points') && !!(items.childs)" :class="'moveIn'+items.layer">
-                </el-option>
-              </el-select>
-
-            </el-form-item>
-          <div v-if="showMenuBlock">
-            <el-form-item :label="$t('table.powerCode')" prop="code">
-              <el-input v-model="formMenu.code"></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('table.powerTitle')" prop="title">
-              <el-input v-model="formMenu.title"></el-input>
-            </el-form-item>
-          </div>
-          <div v-if="showPointBlock" :model="formPoints">
-            <el-form-item :label="$t('table.powerCode')" prop="code">
-              <el-input v-model="formPoints.code"></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('table.powerTitle')" prop="title">
-              <el-input v-model="formPoints.title"></el-input>
-            </el-form-item>
-          </div>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="handleClose">{{$t('table.cancel')}}</el-button>
-          <el-button type="primary" @click="handleSubmit('formMenu')">{{$t('table.confirm')}}</el-button>
+          <el-form-item :label="$t('table.powerTitle')" prop="title">
+            <el-input v-model="formMenu.title"></el-input>
+          </el-form-item>
         </div>
-  </el-dialog>
+        <div v-if="showPointBlock" :model="formPoints">
+          <el-form-item :label="$t('table.powerCode')" prop="code">
+            <el-input v-model="formPoints.code"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('table.powerTitle')" prop="title">
+            <el-input v-model="formPoints.title"></el-input>
+          </el-form-item>
+        </div>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">{{ $t('table.cancel') }}</el-button>
+        <el-button type="primary" @click="handleSubmit('formMenu')">{{ $t('table.confirm') }}</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
 <script>
 import { list, detail, update, add } from '@/api/base/menus'
-import Utils from '@/components/TreeTable/utils/dataTranslate.js'
+// import Utils from '@/components/TreeTable/utils/dataTranslate.js'
+
 let _this = []
 export default {
   name: 'items',
@@ -301,22 +303,26 @@ export default {
     }
   },
   // 挂载结束
-  mounted: function () {},
+  mounted: function () {
+  },
   // 创建完毕状态
   created () {
     _this = this
   },
   // 组件更新
-  updated: function () {}
+  updated: function () {
+  }
 }
 </script>
 <style>
 .el-form--label-left .el-form-item__label {
   text-align: right;
 }
+
 .el-dialog__footer {
   text-align: right;
 }
+
 .moveIn0 {
   text-indent: 14px;
 }
@@ -350,11 +356,13 @@ export default {
     text-decoration: none;
     padding: 5px;
   }
+
   ul {
     list-style: none;
     padding: 6px 0;
     margin: 0;
     overflow: visible;
+
     li {
       display: block;
       width: 100%;
@@ -370,20 +378,24 @@ export default {
       line-height: 1.5;
       box-sizing: border-box;
       cursor: pointer;
+
       &.active {
         background-color: #20a0ff;
+
         a {
           color: #fff;
         }
       }
     }
   }
+
   .select-header {
     position: relative;
     border-radius: 4px;
     border: 1px solid #bfcbd9;
     outline: 0;
     padding: 0 8px;
+
     > input {
       border: none;
       -webkit-appearance: none;
@@ -397,6 +409,7 @@ export default {
       height: 36px;
       line-height: 1;
     }
+
     > i {
       transition: all 0.3s linear;
       display: inline-block;
@@ -406,6 +419,7 @@ export default {
       transform: translateY(-50%);
     }
   }
+
   .select-body {
     z-index: 1000;
     border-radius: 2px;
@@ -414,6 +428,7 @@ export default {
     box-sizing: border-box;
     margin: 5px 0;
     padding: 8px;
+
     > input {
       -webkit-appearance: none;
       -moz-appearance: none;
