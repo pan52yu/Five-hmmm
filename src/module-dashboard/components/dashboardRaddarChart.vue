@@ -5,6 +5,7 @@
 <script>
 import echarts from 'echarts'
 import { debounce } from '@/utils'
+
 require('echarts/theme/macarons') // echarts theme
 
 const animationDuration = 3000
@@ -72,12 +73,11 @@ export default {
             }
           },
           indicator: [
-            { name: 'Sales', max: 10000 },
-            { name: 'Administration', max: 20000 },
-            { name: 'Information Techology', max: 20000 },
-            { name: 'Customer Support', max: 20000 },
-            { name: 'Development', max: 20000 },
-            { name: 'Marketing', max: 20000 }
+            { name: '思维逻辑', max: 10000 },
+            { name: '项目相关', max: 20000 },
+            { name: '基础知识', max: 20000 },
+            { name: '理论基础', max: 20000 },
+            { name: '高阶技术', max: 20000 }
           ]
         },
         series: [{

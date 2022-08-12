@@ -5,6 +5,7 @@
 <script>
 import echarts from 'echarts'
 import { debounce } from '@/utils'
+
 require('echarts/theme/macarons') // echarts theme
 
 export default {
@@ -62,11 +63,11 @@ export default {
             radius: [15, 50],
             center: ['50%', '50%'],
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: 320, name: '前端' },
+              { value: 240, name: 'java' },
+              { value: 149, name: 'Python' },
+              { value: 100, name: 'c + +' },
+              { value: 59, name: 'UI' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

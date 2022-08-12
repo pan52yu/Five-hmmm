@@ -17,19 +17,19 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 /**
  * 基础路由
  *
-* hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
-* alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
-*                                if not set alwaysShow, only more than one route under the children
-*                                it will becomes nested mode, otherwise not show the root menu
-* redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
-* name:'router-name'             the name is used by <keep-alive> (must set!!!)
-* meta : {
+ * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
+ * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
+ *                                if not set alwaysShow, only more than one route under the children
+ *                                it will becomes nested mode, otherwise not show the root menu
+ * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
+ * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * meta : {
     roles: ['admin','editor']     will control the page roles (you can set multiple roles)
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
     noCache: true                if true ,the page will no be cached(default is false)
   }
-**/
+ **/
 export const constantRouterMap = [
   {
     path: '/login',
@@ -52,7 +52,7 @@ export const constantRouterMap = [
         path: 'dashboard',
         component: _import('dashboard/pages/dashboard'),
         name: 'dashboard',
-        meta: { title: '面板', icon: 'dashboard', noCache: true }
+        meta: { title: '数据概览', icon: 'dashboard', noCache: true }
       }
     ]
   }
@@ -74,7 +74,8 @@ router.beforeEach((to, from, next) => {
     /* has token */
     if (to.path === '/login') {
       next({ path: '/' })
-      NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      NProgress.done()
+      // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.roles.length === 0) {
         // 判断当前用户是否已拉取完user_info信息
