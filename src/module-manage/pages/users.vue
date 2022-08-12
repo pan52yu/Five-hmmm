@@ -1,27 +1,17 @@
 <template>
-  <div>
-    用户列表
-  </div>
+  <div>用户列表</div>
 </template>
 
 <script>
 export default {
   data () {
-    return {
-
-    }
+    return {}
   },
 
-  created () {
+  created () {},
 
-  },
-
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
-<style scoped lang='less'>
-
-</style>
+<style scoped lang="less"></style>
