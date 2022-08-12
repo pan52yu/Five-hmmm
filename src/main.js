@@ -59,6 +59,8 @@ Vue.config.productionTip = false
 /* eslint-disable */
 /* eslint-disable */
 /* eslint-disable */
+/* eslint-disable */
+/* eslint-disable */
 new Vue({
   el: '#app',
   router,
