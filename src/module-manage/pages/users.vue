@@ -1,17 +1,205 @@
 <template>
-  <div>
-    用户列表
+  <div class="usersBox">
+    <el-card>
+      <!-- 上面搜索区域 -->
+      <el-row type="flex" :gutter="20" justify="space-between">
+        <!-- 搜索框 -->
+        <el-col :span="6">
+          <el-form>
+            <el-input
+              style="width: 200px"
+              size="small"
+              v-model.trim="formDate.username"
+              placeholder="根据用户名搜索"
+            ></el-input>
+          </el-form>
+        </el-col>
+        <!-- 搜索取消按钮 -->
+        <!-- 搜索取消按钮 -->
+        <el-col>
+          <el-button size="small" @click="clearBtn">清空</el-button>
+          <el-button size="small" type="primary" @click="usersBtnOk">{{
+              $t('table.search')
+            }}
+          </el-button>
+        </el-col>
+        <!-- 新增用户按钮 -->
+        <el-col :span="3">
+          <el-button
+            type="success"
+            icon="el-icon-edit"
+            size="small"
+            @click="addClick"
+          >{{ $t('table.addUser') }}
+          </el-button
+          >
+        </el-col>
+      </el-row>
+      <!-- 记录提示栏 -->
+      <el-row>
+        <el-alert
+          class="info"
+          :title="`共${total}条记录`"
+          type="info"
+          show-icon
+          :closable="false"
+        >
+        </el-alert>
+      </el-row>
+      <!-- 表格区域 -->
+      <el-row>
+        <template>
+          <el-table :data="usersTableData" stripe style="width: 100%">
+            <el-table-column label="序号" type="index"></el-table-column>
+            <el-table-column prop="email" label="邮箱"></el-table-column>
+            <el-table-column prop="phone" label="联系电话"></el-table-column>
+            <el-table-column prop="username" label="用户名"></el-table-column>
+            <el-table-column prop="permission_group_title" label="权限组名称">
+            </el-table-column>
+            <el-table-column prop="role" label="角色"></el-table-column>
+            <el-table-column label="操作">
+              <template v-slot="{ row }">
+                <el-button
+                  icon="el-icon-edit"
+                  circle
+                  plain
+                  type="primary"
+                  @click="editBtnOk(row)"
+                ></el-button>
+                <el-button
+                  icon="el-icon-delete"
+                  circle
+                  plain
+                  type="danger"
+                  @click="delBtnOk(row)"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-row>
+      <!-- 分页器区域 -->
+      <el-row type="flex" justify="center">
+        <el-pagination
+          background
+          @size-change="usersHandleSizeChange"
+          @current-change="usersHandleCurrentChange"
+          :current-page="formDate.page"
+          :page-sizes="[10, 15, 20, 30]"
+          :page-size="formDate.pagesize"
+          layout=" prev, pager, next, sizes, jumper"
+          :total="total"
+        >
+        </el-pagination>
+      </el-row>
+    </el-card>
+
+    <!-- 新增、编辑用户弹层 -->
+    <el-dialog
+      :title="
+        `${usersRuleForm.password != undefined ? '创建' : '编辑'}` + '用户'
+      "
+      :visible.sync="usersdialogShow"
+      @close="close"
+    >
+      <el-form
+        :model="usersRuleForm"
+        :rules="usersRules"
+        ref="usersRuleRef"
+        label-width="100px"
+      >
+        <el-form-item :label="$t('table.username')" prop="username">
+          <el-input v-model="usersRuleForm.username"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('table.email')" prop="email">
+          <el-input v-model="usersRuleForm.email"></el-input>
+        </el-form-item>
+        <el-form-item
+          :label="$t('table.paddword')"
+          prop="password"
+          v-if="usersRuleForm.password != undefined"
+        >
+          <el-input v-model="usersRuleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('table.role')">
+          <el-input v-model="usersRuleForm.role"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('table.permissionUser')">
+          <!-- <el-input v-model="usersRuleForm.permission_group_title"></el-input> -->
+          <el-select
+            v-model="usersRuleForm.permission_group_id"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.title"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('table.phone')">
+          <el-input v-model="usersRuleForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('table.introduction')">
+          <el-input
+            type="textarea"
+            :rows="2"
+            v-model="usersRuleForm.introduction"
+            placeholder="Please input"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 取消、确认按钮 -->
+      <el-row type="flex" justify="center">
+        <el-button size="small" @click="close">{{
+            $t('table.cancel')
+          }}
+        </el-button>
+        <el-button size="small" type="primary" @click="addBtnOk">{{
+            $t('table.confirm')
+          }}
+        </el-button>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { list, add, detail, update, remove } from '@/api/base/users.js'
 import { simple } from '@/api/base/permissions.js'
+
 export default {
   name: 'Users',
   data () {
     return {
-
+      usersdialogShow: false,
+      formDate: {
+        pagesize: 10,
+        page: 1,
+        username: ''
+      },
+      total: 0,
+      usersTableData: [],
+      // 弹层相关属性
+      usersRuleForm: {
+        username: '',
+        email: '',
+        password: '',
+        role: '',
+        permission_group_id: '',
+        phone: '',
+        introduction: ''
+      },
+      usersRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+      },
+      options: []
     }
   },
 
@@ -129,6 +317,12 @@ export default {
 }
 </script>
 
-<style scoped lang='less'>
+<style scoped lang="less">
+.usersBox {
+  margin: 20px;
+}
 
+.info {
+  margin: 20px 0;
+}
 </style>
