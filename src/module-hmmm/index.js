@@ -25,3 +25,5 @@ export default {
     }
   }
 }
+
+// cd C:\\Users\\Administrator\\Desktop\\build\\toutitao-25-1 && git pull && npm i && npm run build && cd ./dist && cp -r -f ./ C:\\phpstudy_pro\\WWW\\weldon.net.cn\\toutiao

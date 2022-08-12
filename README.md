@@ -18,3 +18,5 @@ npm run build
 ### 接口地址跟路径
 
 http://liufusong.top:7001/
+
+初始化
