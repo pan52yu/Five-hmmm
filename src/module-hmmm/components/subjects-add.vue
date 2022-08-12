@@ -4,7 +4,7 @@
     <el-dialog
       @close="close"
       :visible="subjectsDialogShow"
-      :title="`${currentObject.id === null ? '新增' : '修改'} + '学科'`"
+      :title="`${currentObject.id === null ? '新增' : '修改'}`+ '学科'"
     >
       <el-form
         :model="currentObject"
