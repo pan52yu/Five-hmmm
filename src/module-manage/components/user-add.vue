@@ -9,7 +9,6 @@
         label-width="120px"
         style="width: 400px; margin-left:120px;"
       >
-
         <el-form-item :label="$t('table.username')" prop="username">
           <el-input v-model="formBase.username"></el-input>
         </el-form-item>
@@ -66,8 +65,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">{{$t('table.cancel')}}</el-button>
-        <el-button type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
+        <el-button @click="handleClose">{{ $t('table.cancel') }}</el-button>
+        <el-button type="primary" @click="createData">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -75,6 +74,7 @@
 
 <script>
 import { detail, update, add } from '@/api/base/users'
+
 export default {
   name: 'usersAdd',
   props: [
@@ -131,20 +131,25 @@ export default {
   },
   // 挂载结束
 
-  mounted: function () {},
+  mounted: function () {
+  },
   // 创建完毕状态
-  created () {},
+  created () {
+  },
   // 组件更新
-  updated: function () {}
+  updated: function () {
+  }
 }
 </script>
 <style>
 .el-form--label-left .el-form-item__label {
   text-align: right;
 }
+
 .el-form-item--medium {
   margin-bottom: 22px;
 }
+
 .el-dialog__footer {
   text-align: center
 }

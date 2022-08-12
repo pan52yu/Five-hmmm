@@ -128,7 +128,7 @@
 
 <script>
 import { changeState, list, remove } from '@/api/hmmm/articles'
-import ArticlesDialog from '@/components/ArticlesDialog'
+import ArticlesDialog from '@/module-hmmm/components/ArticlesDialog'
 
 export default {
   name: 'Articles',

@@ -109,7 +109,7 @@
 
 <script>
 import { changeState, list, remove } from '@/api/hmmm/tags'
-import TagsDialog from '@/components/TagsDialog'
+import TagsDialog from '@/module-hmmm/components/TagsDialog'
 import { simple } from '@/api/hmmm/subjects'
 
 export default {
