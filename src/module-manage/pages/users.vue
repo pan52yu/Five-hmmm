@@ -15,13 +15,11 @@
           </el-form>
         </el-col>
         <!-- 搜索取消按钮 -->
-        <!-- 搜索取消按钮 -->
         <el-col>
           <el-button size="small" @click="clearBtn">清空</el-button>
           <el-button size="small" type="primary" @click="usersBtnOk">{{
-              $t('table.search')
-            }}
-          </el-button>
+            $t('table.search')
+          }}</el-button>
         </el-col>
         <!-- 新增用户按钮 -->
         <el-col :span="3">
@@ -30,8 +28,7 @@
             icon="el-icon-edit"
             size="small"
             @click="addClick"
-          >{{ $t('table.addUser') }}
-          </el-button
+            >{{ $t('table.addUser') }}</el-button
           >
         </el-col>
       </el-row>
@@ -50,13 +47,13 @@
       <el-row>
         <template>
           <el-table :data="usersTableData" stripe style="width: 100%">
-            <el-table-column label="序号" type="index"></el-table-column>
-            <el-table-column prop="email" label="邮箱"></el-table-column>
-            <el-table-column prop="phone" label="联系电话"></el-table-column>
-            <el-table-column prop="username" label="用户名"></el-table-column>
+            <el-table-column label="序号" type="index"> </el-table-column>
+            <el-table-column prop="email" label="邮箱"> </el-table-column>
+            <el-table-column prop="phone" label="联系电话"> </el-table-column>
+            <el-table-column prop="username" label="用户名"> </el-table-column>
             <el-table-column prop="permission_group_title" label="权限组名称">
             </el-table-column>
-            <el-table-column prop="role" label="角色"></el-table-column>
+            <el-table-column prop="role" label="角色"> </el-table-column>
             <el-table-column label="操作">
               <template v-slot="{ row }">
                 <el-button
@@ -154,13 +151,11 @@
       <!-- 取消、确认按钮 -->
       <el-row type="flex" justify="center">
         <el-button size="small" @click="close">{{
-            $t('table.cancel')
-          }}
-        </el-button>
+          $t('table.cancel')
+        }}</el-button>
         <el-button size="small" type="primary" @click="addBtnOk">{{
-            $t('table.confirm')
-          }}
-        </el-button>
+          $t('table.confirm')
+        }}</el-button>
       </el-row>
     </el-dialog>
   </div>
@@ -169,7 +164,6 @@
 <script>
 import { list, add, detail, update, remove } from '@/api/base/users.js'
 import { simple } from '@/api/base/permissions.js'
-
 export default {
   name: 'Users',
   data () {
