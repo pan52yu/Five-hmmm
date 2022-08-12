@@ -57,26 +57,22 @@
         </el-table-column>
         <el-table-column
           prop="visits"
-          label="阅读数"
-          width="120">
+          label="阅读数">
         </el-table-column>
         <el-table-column
           prop="username"
-          label="录入人"
-          width="120">
+          label="录入人">
         </el-table-column>
         <el-table-column
           prop="createTime"
-          label="录入时间"
-          width="180">
+          label="录入时间">
           <template v-slot="{row}">
             {{ row.createTime | dataFormat }}
           </template>
         </el-table-column>
         <el-table-column
           prop="state"
-          label="状态"
-          width="100">
+          label="状态">
           <template v-slot="scope">
             {{ scope.row.state === 1 ? '已启用' : '已禁用' }}
           </template>

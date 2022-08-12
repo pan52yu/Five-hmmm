@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+<!--<<<<<<< HEAD-->
 <template>
   <div class="logs">
     日志
@@ -20,6 +20,6 @@ export default {
 <style lang="less" scoped>
 
 </style>
-=======
+<!--=======-->
 
->>>>>>> origin/base-permissions
+<!--&gt;>>>>>> origin/base-permissions-->
