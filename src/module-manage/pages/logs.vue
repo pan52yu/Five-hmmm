@@ -19,11 +19,25 @@
 </template>
 
 <script>
+import { list } from "../../api/base/logs";
 export default {
   data() {
     return {
       tableData: [],
+      form: {
+        page: 1,
+        pagesize: 10,
+      },
     };
+  },
+  created() {
+    this.list();
+  },
+  methods: {
+    async list() {
+      const res = await list(this.form);
+      console.log(res);
+    },
   },
 };
 </script>
