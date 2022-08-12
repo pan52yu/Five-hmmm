@@ -13,7 +13,7 @@ import { createAPI } from '@/utils/request'
 export const list = data => createAPI('/tags', 'get', data)
 
 // 标签简单列表
-export const simple = data => createAPI('/tags/simple', 'get', data)
+export const simpl = data => createAPI('/tags/simple', 'get', data)
 
 // 标签详情
 export const detail = data => createAPI(`/tags/${data.id}`, 'get', data)
