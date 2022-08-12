@@ -46,7 +46,16 @@
       <!-- 表格区域 -->
       <el-row>
         <template>
-          <el-table :data="usersTableData" stripe style="width: 100%">
+          <el-table
+            :data="usersTableData"
+            stripe
+            style="width: 100%"
+            :header-cell-style="{
+              backgroundColor: '#f4f4f5',
+              color: '#909399',
+              'border-bottom': '2px solid #e8e8e8'
+            }"
+          >
             <el-table-column label="序号" type="index"> </el-table-column>
             <el-table-column prop="email" label="邮箱"> </el-table-column>
             <el-table-column prop="phone" label="联系电话"> </el-table-column>
