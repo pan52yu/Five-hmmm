@@ -9,7 +9,9 @@
         </el-col>
         <el-col :span="3">
           <div class="grid-content bg-purple">
-            <el-button class="el-icon-edit addBtn" size="small" type="success"> &nbsp;新增试题</el-button>
+            <el-button class="el-icon-edit addBtn" size="small" type="success" @click="$router.push({
+            path:'new'
+            })"> &nbsp;新增试题</el-button>
           </div>
         </el-col>
       </el-row>
@@ -209,7 +211,12 @@
         <el-table-column label="操作" width="300">
           <template v-slot="{row}">
             <el-button circle class="el-icon-view btn-view" size="small" @click="preview(row)"></el-button>
-            <el-button circle class="el-icon-edit btn-edit" size="small"></el-button>
+            <el-button circle class="el-icon-edit btn-edit" size="small" @click="$router.push({
+            path:'new',
+            query:{
+              id:row.id
+            }
+            })"></el-button>
             <el-button circle class="el-icon-delete btn-delete" size="small" @click="dele(row)"></el-button>
             <el-button circle class="el-icon-check btn-check" size="small" @click="check(row)"></el-button>
           </template>
@@ -227,7 +234,8 @@
         @current-change="handleCurrentChange">
       </el-pagination>
     </el-card>
-    <questions-preview :currentItem="currentItem" :dialogVisible.sync="dialogVisible"></questions-preview>
+    <questions-preview :currentItem="currentItem" :dialogVisible.sync="dialogVisible"
+                       :options="options"></questions-preview>
   </div>
 </template>
 
@@ -332,7 +340,8 @@ export default {
       userSimpleList: [],
       provincesList: [],
       cityList: [],
-      currentItem: {}
+      currentItem: {},
+      options: []
     }
   },
   created () {
@@ -344,7 +353,6 @@ export default {
   methods: {
     // 日期格式化
     dateFormat (row, column, cellValue, index) {
-      console.log(row, column, cellValue, index)
       const daterc = row[column.property]
       if (daterc != null) {
         var date = new Date(daterc)
@@ -410,6 +418,8 @@ export default {
         id: current.id
       })
       this.currentItem = res.data
+      this.options = this.currentItem.options
+      console.log(this.currentItem)
     },
     // 清除
     close () {
