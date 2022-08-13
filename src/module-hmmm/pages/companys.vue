@@ -319,11 +319,13 @@ export default {
         `已成功${row.state === 0 ? "启用" : "禁用"},是否继续?`,
         "提示"
       );
+      console.log(row);
       const data = {
         id: row.id,
         state: row.state === 0 ? 1 : 0,
       };
       await disabled(data);
+      await this.companyList();
       await this.$message.success(
         `已成功${row.state === 0 ? "启用" : "禁用"}标签`
       );

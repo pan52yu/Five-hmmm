@@ -124,33 +124,29 @@ export default {
     },
     // 取消
     close() {
+      this.$refs["dataForm"].resetField();
       this.dialogFormVisible = false;
-      this.$refs.dataForm.resetFields();
-      this.formBase = {
-        shortName: "",
-        isFamous: "",
-        company: "",
-        province: "",
-        city: "",
-        tags: "",
-        remarks: "",
-      };
     },
     // 确认
     async submit() {
       try {
         this.$refs.dataForm.validate();
-
-        if (this.companysId.id === null) {
-          console.log(this.companysId.id);
+        if (!this.formBase.id) {
+          this.formBase.isFamous
+            ? (this.formBase.isFamous = false)
+            : (this.formBase.isFamous = true);
           await add(this.formBase);
           await this.$message.success("新增成功");
         } else {
+          delete this.formBase.userName;
+          this.formBase.isFamous === 1
+            ? (this.formBase.isFamous = true)
+            : (this.formBase.isFamous = false);
           await update(this.formBase);
           await this.$message.success("编辑成功");
         }
-        this.$emit("newDataes");
         this.close();
+        this.$emit("newDataes");
       } catch (e) {
         console.log(e);
       }
