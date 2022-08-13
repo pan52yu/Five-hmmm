@@ -1,7 +1,7 @@
 <template>
   <div class="add-form">
     <!-- :title="titleInfo.text + titleInfo.pageTitle" -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible">
+    <el-dialog :title="`${title}`" :visible.sync="dialogFormVisible">
       <el-form
         :rules="ruleInline"
         ref="dataForm"
@@ -28,7 +28,7 @@
             filterable
           >
             <el-option
-              v-for="item in citySelect.province"
+              v-for="item in province"
               :key="item"
               :label="item"
               :value="item"
@@ -42,7 +42,7 @@
             filterable
           >
             <el-option
-              v-for="item in citySelect.cityDate"
+              v-for="item in cityDate"
               :key="item"
               :label="item"
               :value="item"
@@ -62,36 +62,44 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormH">{{ $t("table.cancel") }}</el-button>
-        <el-button type="primary" @click="createData">{{
+        <el-button @click="close">{{ $t("table.cancel") }}</el-button>
+        <el-button type="primary" @click="submit">{{
           $t("table.confirm")
         }}</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
+
 <script>
-import { update, add } from "@/api/base/users";
 import { provinces, citys } from "@/api/hmmm/citys.js";
+import { add, update } from "../../api/hmmm/companys";
 export default {
-  name: "CompanysAdd",
   props: {
-    // titleInfo: {
-    //   type: Object,
-    //   required: true,
-    // },
     formBase: {
       type: Object,
-      required: true,
+      default: () => {},
+    },
+    title: {
+      type: String,
     },
   },
   data() {
     return {
       dialogFormVisible: false,
-      citySelect: {
-        province: [],
-        cityDate: [],
-      },
+
+      province: [],
+      cityDate: [],
+
+      // formBase: {
+      //   shortName: "",
+      //   isFamous: "",
+      //   company: "",
+      //   province: "",
+      //   city: "",
+      //   tags: "",
+      //   remarks: "",
+      // },
       // 表单验证
       ruleInline: {
         shortName: [
@@ -104,60 +112,50 @@ export default {
       },
     };
   },
-  computed: {},
+
+  created() {
+    this.province = provinces(); //获取到城市
+  },
+
   methods: {
-    // 弹层显示
-    dialogFormV() {
-      this.dialogFormVisible = true;
+    // 获取省市区
+    handleProvince() {
+      this.cityDate = citys(this.formBase.province);
     },
-    // 弹层隐藏
-    dialogFormH() {
+    // 取消
+    close() {
+      this.$refs["dataForm"].resetField();
       this.dialogFormVisible = false;
     },
-    // 获取省
-    getCityData: function () {
-      this.citySelect.province = provinces();
-    },
-    // 选省获取到市
-    handleProvince: function (e) {
-      this.citySelect.cityDate = citys(e);
-      this.formBase.city = this.citySelect.cityDate[0];
-    },
-    // 表单提交
-    createData() {
-      this.$refs.dataForm.validate(async (valid) => {
-        if (valid) {
-          this.dialogFormH();
-          const data = {
-            ...this.formBase,
-          };
-          if (this.formBase.id) {
-            await update(data).then(() => {
-              this.$emit("newDataes", this.formBase);
-            });
-          } else {
-            await add(this.formBase).then(() => {
-              this.$emit("newDataes", this.formBase);
-            });
-          }
+    // 确认
+    async submit() {
+      try {
+        this.$refs.dataForm.validate();
+        if (!this.formBase.id) {
+          this.formBase.isFamous
+            ? (this.formBase.isFamous = false)
+            : (this.formBase.isFamous = true);
+          await add(this.formBase);
+          await this.$message.success("新增成功");
         } else {
-          this.$message.error("*号为必填项!");
+          delete this.formBase.userName;
+          this.formBase.isFamous === 1
+            ? (this.formBase.isFamous = true)
+            : (this.formBase.isFamous = false);
+          await update(this.formBase);
+          await this.$message.success("编辑成功");
         }
-      });
+        this.close();
+        this.$emit("newDataes");
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
-  // 挂载结束
-
-  mounted: function () {},
-  // 创建完毕状态
-  created() {
-    this.getCityData();
-  },
-  // 组件更新
-  updated: function () {},
 };
 </script>
-<style>
+
+<style scoped lang="less">
 .el-form--label-left .el-form-item__label {
   text-align: right;
 }
