@@ -13,23 +13,31 @@
           ></el-col>
           <el-col :span="6">
             <el-form-item label="城市">
-              <el-cascader
-                size="large"
-                :options="citys"
-                v-model="selectedOptions"
-                @change="handleChange"
+              <el-select
+                v-model="formRef.city"
+                placeholder="请选择"
+                @change="changeCitys"
               >
-              </el-cascader> </el-form-item
+                <el-option
+                  v-for="item in optionsProvinces"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+              </el-select> </el-form-item
           ></el-col>
           <el-col :span="6">
             <el-form-item label="地区">
-              <el-cascader
-                size="large"
-                :options="citys"
-                v-model="selectedOptions"
-                @change="handleChange"
-              >
-              </el-cascader> </el-form-item
+              <el-select v-model="formRef.province" placeholder="请选择">
+                <el-option
+                  v-for="item in optionsCitys"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+              </el-select> </el-form-item
           ></el-col>
           <el-col :span="6">
             <el-form-item label="企业简称">
@@ -121,6 +129,7 @@
               icon="el-icon-edit"
               circle
               plain
+              @click="edit(row)"
             ></el-button>
 
             <el-tooltip
@@ -135,6 +144,7 @@
                 circle
                 plain
                 v-if="row.state === 0"
+                @click="open(row)"
               ></el-button>
               <el-button
                 type="warning"
@@ -142,6 +152,7 @@
                 circle
                 plain
                 v-else
+                @click="open(row)"
               ></el-button>
             </el-tooltip>
 
@@ -170,14 +181,19 @@
       </el-row>
     </el-card>
 
-    <!-- <CompanysAdd ref="companysAdd"x></CompanysAdd> -->
+    <CompanysAdd
+      ref="addCompanys"
+      @newDataes="newDataes"
+      :formBase="companysId"
+    ></CompanysAdd>
   </div>
 </template>
 
 <script>
-import { list, remove } from "../../api/hmmm/companys";
+import { list, remove, disabled } from "../../api/hmmm/companys";
 import { regionDataPlus } from "element-china-area-data";
-import CompanysAdd from "../components/companys-add.vue";
+import CompanysAdd from "../components/compinysAdd.vue";
+import { citys, provinces } from "../../api/hmmm/citys";
 export default {
   components: {
     CompanysAdd,
@@ -187,8 +203,11 @@ export default {
       formRef: {
         tags: "",
         city: "",
+        province: "",
         shortName: "",
         state: "",
+        page: 1,
+        pagesize: 10,
       },
       tableData: [],
       page: {
@@ -208,11 +227,25 @@ export default {
       ],
       citys: regionDataPlus,
       selectedOptions: [],
+      optionsProvinces: [],
+      optionsCitys: [],
+      companysId: {
+        // shortName: "",
+        // isFamous: "",
+        // company: "",
+        // province: "",
+        // city: "",
+        // tags: "",
+        // remarks: "",
+      },
     };
   },
 
   created() {
     this.companyList();
+    // 获取城市
+    this.optionsProvinces = provinces();
+    // console.log(provinces());
   },
 
   methods: {
@@ -235,38 +268,67 @@ export default {
 
     // 删除
     async delItem(id) {
-      await this.$confirm("此操作将永久删除用户，是否继续？");
-      await remove({
-        ...id,
-        id,
-      });
-      this.$message.success("删除成功");
-      this.companyList();
+      try {
+        await this.$confirm("此操作将永久删除用户，是否继续？", "提示");
+        await remove({
+          ...id,
+          id,
+        });
+        this.$message.success("删除成功");
+        this.companyList();
+      } catch (e) {
+        console.log(e);
+      }
     },
 
     // 新增
     add() {
-      this.$refs.companysAdd.dialogFormV();
+      this.$refs.addCompanys.dialogFormVisible = true;
+    },
+
+    // 编辑
+    edit(row) {
+      this.$refs.addCompanys.dialogFormVisible = true;
+      this.companysId = row;
+    },
+
+    // 子传父 通知父组件重新渲染页面
+    async newDataes() {
+      await this.companyList();
     },
 
     // 清除
-    clear() {
-      this.$refs.form.resetFields();
-      this.companyList();
+    async clear() {
+      await this.$refs.form.resetFields();
+      await this.companyList();
     },
     // 搜索
-    search() {},
+    async search() {
+      const { data } = await list(this.formRef);
+      console.log(data);
+      this.tableData = data.items;
+    },
 
-    handleChange() {},
+    // 改变开启 / 禁用 状态
+    async open(row) {
+      await this.$confirm(
+        `已成功${row.state === 0 ? "启用" : "禁用"},是否继续?`,
+        "提示"
+      );
+      const data = {
+        id: row.id,
+        state: row.state === 0 ? 1 : 0,
+      };
+      await disabled(data);
+      await this.$message.success(
+        `已成功${row.state === 0 ? "启用" : "禁用"}标签`
+      );
+    },
 
-    getAddress(value) {
-      //value是长度为2的装有被选择省、市代码的数组;CodeToText是个对象，键名为代码，键值为省和城市
-      this.selectedAddress = [];
-      for (let i = 0; i < value.length; i++) {
-        let code = value[i];
-        this.selectedAddress.push(CodeToText[code]);
-      }
-      console.log(this.selectedAddress); //["河北省","唐山市"]
+    // 获取地区
+    changeCitys() {
+      this.optionsCitys = citys(this.formRef.city);
+      console.log(citys(this.formRef.city));
     },
   },
 };

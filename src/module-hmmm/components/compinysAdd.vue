@@ -28,7 +28,7 @@
             filterable
           >
             <el-option
-              v-for="item in citySelect.province"
+              v-for="item in province"
               :key="item"
               :label="item"
               :value="item"
@@ -42,7 +42,7 @@
             filterable
           >
             <el-option
-              v-for="item in citySelect.cityDate"
+              v-for="item in cityDate"
               :key="item"
               :label="item"
               :value="item"
@@ -62,36 +62,41 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormH">{{ $t("table.cancel") }}</el-button>
-        <el-button type="primary" @click="createData">{{
+        <el-button @click="close">{{ $t("table.cancel") }}</el-button>
+        <el-button type="primary" @click="submit">{{
           $t("table.confirm")
         }}</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
+
 <script>
-import { update, add } from "@/api/base/users";
 import { provinces, citys } from "@/api/hmmm/citys.js";
+import { add, update } from "../../api/hmmm/companys";
 export default {
-  name: "CompanysAdd",
   props: {
-    // titleInfo: {
-    //   type: Object,
-    //   required: true,
-    // },
     formBase: {
       type: Object,
-      required: true,
+      default: () => {},
     },
   },
   data() {
     return {
       dialogFormVisible: false,
-      citySelect: {
-        province: [],
-        cityDate: [],
-      },
+
+      province: [],
+      cityDate: [],
+
+        // formBase: {
+        //   shortName: "",
+        //   isFamous: "",
+        //   company: "",
+        //   province: "",
+        //   city: "",
+        //   tags: "",
+        //   remarks: "",
+        // },
       // 表单验证
       ruleInline: {
         shortName: [
@@ -104,60 +109,54 @@ export default {
       },
     };
   },
-  computed: {},
-  methods: {
-    // 弹层显示
-    dialogFormV() {
-      this.dialogFormVisible = true;
-    },
-    // 弹层隐藏
-    dialogFormH() {
-      this.dialogFormVisible = false;
-    },
-    // 获取省
-    getCityData: function () {
-      this.citySelect.province = provinces();
-    },
-    // 选省获取到市
-    handleProvince: function (e) {
-      this.citySelect.cityDate = citys(e);
-      this.formBase.city = this.citySelect.cityDate[0];
-    },
-    // 表单提交
-    createData() {
-      this.$refs.dataForm.validate(async (valid) => {
-        if (valid) {
-          this.dialogFormH();
-          const data = {
-            ...this.formBase,
-          };
-          if (this.formBase.id) {
-            await update(data).then(() => {
-              this.$emit("newDataes", this.formBase);
-            });
-          } else {
-            await add(this.formBase).then(() => {
-              this.$emit("newDataes", this.formBase);
-            });
-          }
-        } else {
-          this.$message.error("*号为必填项!");
-        }
-      });
-    },
-  },
-  // 挂载结束
 
-  mounted: function () {},
-  // 创建完毕状态
   created() {
-    this.getCityData();
+    this.province = provinces(); //获取到城市
   },
-  // 组件更新
-  updated: function () {},
+
+  methods: {
+    // 获取省市区
+    handleProvince() {
+      this.cityDate = citys(this.formBase.province);
+    },
+    // 取消
+    close() {
+      this.dialogFormVisible = false;
+      this.$refs.dataForm.resetFields();
+      this.formBase = {
+        shortName: "",
+        isFamous: "",
+        company: "",
+        province: "",
+        city: "",
+        tags: "",
+        remarks: "",
+      };
+    },
+    // 确认
+    async submit() {
+      try {
+        this.$refs.dataForm.validate();
+
+        if (this.companysId.id === null) {
+          console.log(this.companysId.id);
+          await add(this.formBase);
+          await this.$message.success("新增成功");
+        } else {
+          await update(this.formBase);
+          await this.$message.success("编辑成功");
+        }
+        this.$emit("newDataes");
+        this.close();
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  },
 };
 </script>
-<style>
+
+<style scoped lang="less">
 .el-form--label-left .el-form-item__label {
   text-align: right;
 }
