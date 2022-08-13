@@ -19,9 +19,8 @@
         <el-col>
           <el-button size="small" @click="clearBtn">清除</el-button>
           <el-button size="small" type="primary" @click="usersBtnOk">{{
-              $t('table.search')
-            }}
-          </el-button>
+            $t('table.search')
+          }}</el-button>
         </el-col>
         <!-- 新增用户按钮 -->
         <el-col :span="3">
@@ -30,8 +29,7 @@
             icon="el-icon-edit"
             size="small"
             @click="addClick"
-          >新增学科
-          </el-button
+            >新增学科</el-button
           >
         </el-col>
       </el-row>
@@ -60,10 +58,10 @@
               'border-bottom': '2px solid #e8e8e8'
             }"
           >
-            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column type="index" label="序号"> </el-table-column>
             <el-table-column prop="subjectName" label="学科名称">
             </el-table-column>
-            <el-table-column prop="username" label="创建者"></el-table-column>
+            <el-table-column prop="username" label="创建者"> </el-table-column>
             <el-table-column width="180px" label="创建日期">
               <template v-slot="{ row }">
                 {{ row.addDate | parseTimeByString }}
@@ -77,38 +75,30 @@
             </el-table-column>
             <el-table-column prop="twoLevelDirectory" label="二级目录">
             </el-table-column>
-            <el-table-column prop="tags" label="标签"></el-table-column>
-            <el-table-column prop="totals" label="题目数量"></el-table-column>
+            <el-table-column prop="tags" label="标签"> </el-table-column>
+            <el-table-column prop="totals" label="题目数量"> </el-table-column>
             <el-table-column label="操作" width="280px">
               <template v-slot="{ row }">
                 <el-link
                   :underline="false"
                   type="primary"
-                  @click="$router.push({
-                  name:'subjects-directorys',params:{status:true,id:row.id}
-                  })"
-                >学科分类
-                </el-link
+                  @click="$router.push('directorys')"
+                  >学科分类</el-link
                 >
                 <el-link
                   :underline="false"
                   type="primary"
-                  @click="$router.push({
-                  name:'subjects-tags',params:{status:true,id:row.id}
-                  })"
-                >学科标签
-                </el-link
+                  @click="$router.push('tags')"
+                  >学科标签</el-link
                 >
                 <el-link :underline="false" type="primary" @click="editBtn(row)"
-                >修改
-                </el-link
+                  >修改</el-link
                 >
                 <el-link
                   :underline="false"
                   type="primary"
                   @click="delBtn(row.id)"
-                >删除
-                </el-link
+                  >删除</el-link
                 >
               </template>
             </el-table-column>
@@ -146,7 +136,7 @@ import subjectsAdd from '../components/subjects-add.vue'
 export default {
   components: { subjectsAdd },
   name: 'List',
-  data() {
+  data () {
     return {
       currentObject: {},
       subjectsDialogShow: false,
@@ -159,11 +149,11 @@ export default {
       listTableData: []
     }
   },
-  created() {
+  created () {
     this.getList()
   },
   methods: {
-    async getList() {
+    async getList () {
       const res = await list(this.formDate)
       // console.log(res)
       if (res.status !== 200) {
@@ -173,37 +163,36 @@ export default {
       // console.log(this.listTableData)
       this.total = res.data.counts
     },
-    clearBtn() {
+    clearBtn () {
       this.formDate.subjectName = ''
       this.getList()
     },
-    usersBtnOk() {
+    usersBtnOk () {
       this.getList()
     },
-    addClick() {
+    addClick () {
       this.currentObject = {
         id: null,
         isFrontDisplay: true
       }
       this.subjectsDialogShow = true
     },
-    usersHandleSizeChange(page) {
+    usersHandleSizeChange (page) {
       this.formDate.pagesize = page
       this.getList()
     },
-    usersHandleCurrentChange(page) {
+    usersHandleCurrentChange (page) {
       this.formDate.page = page
       this.getList()
     },
-    editBtn(row) {
-      console.log(row)
+    editBtn (row) {
       row.isFrontDisplay === 1
         ? (row.isFrontDisplay = true)
         : (row.isFrontDisplay = false)
       this.currentObject = row
       this.subjectsDialogShow = true
     },
-    async delBtn(id) {
+    async delBtn (id) {
       const res = await this.$confirm(
         '此操作将永久删除该文件, 是否继续?',
         '提示',
