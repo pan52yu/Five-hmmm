@@ -39,6 +39,16 @@
         >
         </el-table-column>
         <el-table-column prop="questionIDs" label="题目编号" width="220">
+          <template v-slot="{ row }">
+            <a
+              @click="bianhaobtn(row)"
+              v-for="(item, index) in row.questionIDs"
+              :key="index"
+              style="color: rgb(0, 153, 255)"
+            >
+              {{ item.number }}
+            </a>
+          </template>
         </el-table-column>
         <el-table-column prop="addTime" label="录入时间" width="180">
         </el-table-column>
@@ -74,14 +84,52 @@
       >
       </el-pagination>
     </el-card>
+    <el-dialog
+      title="题目预览"
+      :visible="yulanShow"
+      width="900px"
+      @close="close"
+    >
+      <el-row>
+        <el-col style="padding: 10px 0">【题型】：</el-col>
+        <el-col style="padding: 10px 0">【编号】：</el-col>
+        <el-col style="padding: 10px 0">【难度】：</el-col>
+        <el-col style="padding: 10px 0">【标签】：</el-col>
+        <el-col style="padding: 10px 0">【学科】：</el-col>
+        <el-col style="padding: 10px 0">【目录】：</el-col>
+        <el-col style="padding: 10px 0">【方向】：</el-col>
+      </el-row>
+      <hr />
+      【题干】：
+      <div>单选题 选项：（以下选中的选项为正确答案）</div>
+      <br />
+      <!-- <div v-for="(item, index) in optionsList" :key="index">
+        <el-radio v-model="xuanxiang" :label="item.isRight">{{
+          item.title
+        }}</el-radio>
+        <br /><br />
+      </div> -->
+      <hr />
+      【参考答案】：<el-button type="danger" size="small"
+        >视频答案预览</el-button
+      >
+      <hr />
+      【答案解析】：
+      <hr />
+      【题目备注】：
+      <span slot="footer">
+        <el-button type="primary" @click="close">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { randoms, removeRandoms } from "@/api/hmmm/questions";
+import { randoms, removeRandoms, detail } from "@/api/hmmm/questions";
 export default {
   data() {
     return {
+      yulanShow: false,
       tableData: [],
       questionIDsList: [],
       guanjianzi: "",
@@ -96,6 +144,13 @@ export default {
     this.randoms();
   },
   methods: {
+    async bianhaobtn(row) {
+      this.yulanShow = true;
+      await detail({ id: row.id });
+    },
+    close() {
+      this.yulanShow = false;
+    },
     deletebtn(row) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -132,14 +187,6 @@ export default {
       console.log(res);
       this.tableData = res.data.items;
       this.page.total = res.data.counts;
-      this.tableData.forEach((item) => {
-        // console.log(item);
-        this.questionIDsList.push(item.questionIDs);
-        // console.log(this.questionIDsList);
-        this.questionIDsList.forEach((item) => {
-          // console.log(item);
-        });
-      });
     },
     tixing(row, column, cellValue) {
       if (cellValue === "1") {
