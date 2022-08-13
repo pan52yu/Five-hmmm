@@ -185,6 +185,7 @@
       ref="addCompanys"
       @newDataes="newDataes"
       :formBase="companysId"
+      :title="title"
     ></CompanysAdd>
   </div>
 </template>
@@ -238,6 +239,7 @@ export default {
         // tags: "",
         // remarks: "",
       },
+      title: "",
     };
   },
 
@@ -284,12 +286,14 @@ export default {
     // 新增
     add() {
       this.$refs.addCompanys.dialogFormVisible = true;
+      this.title = "创建用户";
     },
 
     // 编辑
     edit(row) {
       this.$refs.addCompanys.dialogFormVisible = true;
       this.companysId = row;
+      this.title = "编辑用户";
     },
 
     // 子传父 通知父组件重新渲染页面

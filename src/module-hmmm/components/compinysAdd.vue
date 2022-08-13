@@ -1,7 +1,7 @@
 <template>
   <div class="add-form">
     <!-- :title="titleInfo.text + titleInfo.pageTitle" -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible">
+    <el-dialog :title="`${title}`" :visible.sync="dialogFormVisible">
       <el-form
         :rules="ruleInline"
         ref="dataForm"
@@ -80,6 +80,9 @@ export default {
       type: Object,
       default: () => {},
     },
+    title: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -88,15 +91,15 @@ export default {
       province: [],
       cityDate: [],
 
-        // formBase: {
-        //   shortName: "",
-        //   isFamous: "",
-        //   company: "",
-        //   province: "",
-        //   city: "",
-        //   tags: "",
-        //   remarks: "",
-        // },
+      // formBase: {
+      //   shortName: "",
+      //   isFamous: "",
+      //   company: "",
+      //   province: "",
+      //   city: "",
+      //   tags: "",
+      //   remarks: "",
+      // },
       // 表单验证
       ruleInline: {
         shortName: [
