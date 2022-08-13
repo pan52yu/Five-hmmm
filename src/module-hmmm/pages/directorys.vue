@@ -82,13 +82,13 @@
             <el-button type="text" @click="open(row)" v-else>启用</el-button>
             <el-button
               type="text"
-              :disabled="row.state === 1"
+              :disabled="row.state === 0"
               @click="edit(row)"
               >修改</el-button
             >
             <el-button
               type="text"
-              :disabled="row.state === 1"
+              :disabled="row.state === 0"
               @click="delItem(row.id)"
               >删除</el-button
             >

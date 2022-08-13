@@ -53,7 +53,7 @@ export default {
   props: {
     formDate: {
       type: Object,
-      default: () => {},
+      default: {},
     },
     title: {
       type: String,
@@ -99,7 +99,8 @@ export default {
         const id = {
           id: null,
         };
-        if (this.formDate.id === null) {
+        console.log(this.formDate);
+        if (this.formDate.id === null || !this.formDate.id) {
           await add({
             ...this.formDate,
             ...id,
