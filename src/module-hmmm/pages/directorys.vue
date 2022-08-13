@@ -70,15 +70,28 @@
         </el-table-column>
         <el-table-column prop="state" label="状态" width="180">
           <template v-slot="{ row }">
-            <span v-if="row.state === 1">开启</span>
-            <span v-else>屏蔽</span>
+            <span v-if="row.state === 1">已开启</span>
+            <span v-else>已禁用</span>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作">
           <template v-slot="{ row }">
-            <el-button type="text">禁用</el-button>
-            <el-button type="text">修改</el-button>
-            <el-button type="text" @click="delItem(row)">删除</el-button>
+            <el-button type="text" @click="open(row)" v-if="row.state === 1"
+              >禁用</el-button
+            >
+            <el-button type="text" @click="open(row)" v-else>启用</el-button>
+            <el-button
+              type="text"
+              :disabled="row.state === 1"
+              @click="edit(row)"
+              >修改</el-button
+            >
+            <el-button
+              type="text"
+              :disabled="row.state === 1"
+              @click="delItem(row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -97,12 +110,18 @@
       </el-row>
     </el-card>
 
-    <DirectorysAdd ref="directorysAdd"></DirectorysAdd>
+    <!-- 添加和编辑 弹窗组件 -->
+    <DirectorysAdd
+      ref="directorysAdd"
+      :formDate="driectoryEdit"
+      @modification="modification"
+      :title="title"
+    ></DirectorysAdd>
   </div>
 </template>
 
 <script>
-import { list } from "../../api/hmmm/directorys";
+import { list, remove, changeState } from "../../api/hmmm/directorys";
 import DirectorysAdd from "../components/directorys-add.vue";
 export default {
   components: {
@@ -128,6 +147,10 @@ export default {
           label: "禁用",
         },
       ],
+      driectoryEdit: {
+        id: null,
+      },
+      title: "",
     };
   },
   created() {
@@ -161,11 +184,46 @@ export default {
     },
 
     // 删除
-    async delItem() {},
+    async delItem(id) {
+      try {
+        await this.$confirm("此操作将永久删除用户，是否继续？", "提示");
+        await remove({
+          ...id,
+          id,
+        });
+        await this.driectoryList();
+      } catch (e) {
+        console.log(e);
+      }
+    },
 
     // 添加
-    async add() {
-      await this.$refs.directorysAdd.dialogVisible;
+    add() {
+      this.$refs.directorysAdd.dialogVisible = true;
+      this.title = "新增目录";
+    },
+
+    // 编辑
+    edit(row) {
+      this.$refs.directorysAdd.dialogVisible = true;
+      this.driectoryEdit = row;
+      this.title = "编辑目录";
+    },
+
+    // 子传父 通知父组件重新渲染页面
+    async modification() {
+      await this.driectoryList();
+      this.driectoryEdit = {};
+    },
+
+    // 改变状态  已启用/已禁用
+    async open(row) {
+      const data = {
+        id: row.id,
+        state: row.state === 1 ? 0 : 1,
+      };
+      await changeState(data);
+      await this.driectoryList();
     },
   },
 };
