@@ -31,7 +31,9 @@
             </el-form-item>
           </el-col>
           <el-row type="flex" justify="end">
-            <el-button type="success" icon="el-icon-edit">新增目录</el-button>
+            <el-button type="success" icon="el-icon-edit" @click="add"
+              >新增目录</el-button
+            >
           </el-row>
         </el-form>
       </el-row>
@@ -94,12 +96,18 @@
         </el-pagination>
       </el-row>
     </el-card>
+
+    <DirectorysAdd ref="directorysAdd"></DirectorysAdd>
   </div>
 </template>
 
 <script>
 import { list } from "../../api/hmmm/directorys";
+import DirectorysAdd from "../components/directorys-add.vue";
 export default {
+  components: {
+    DirectorysAdd,
+  },
   data() {
     return {
       form: {
@@ -154,6 +162,11 @@ export default {
 
     // 删除
     async delItem() {},
+
+    // 添加
+    async add() {
+      await this.$refs.directorysAdd.dialogVisible;
+    },
   },
 };
 </script>
