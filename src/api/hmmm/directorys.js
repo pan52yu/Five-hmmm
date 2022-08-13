@@ -13,7 +13,7 @@ import { createAPI } from '@/utils/request'
 export const list = data => createAPI('/directorys', 'get', data)
 
 // 目录简单列表
-export const simple = data => createAPI('/directorys/simple', 'get', data)
+export const simples = data => createAPI('/directorys/simple', 'get', data)
 
 // 目录详情
 export const detail = data => createAPI(`/directorys/${data.id}`, 'get', data)
