@@ -146,8 +146,10 @@
           </el-col>
           <el-col>
             <el-form-item style="float: right">
-              <el-button size="small">清除</el-button>
-              <el-button type="primary" size="small">搜索</el-button>
+              <el-button size="small" @click="cleanbtn">清除</el-button>
+              <el-button type="primary" size="small" @click="sousuo"
+                >搜索</el-button
+              >
             </el-form-item>
           </el-col>
         </el-row>
@@ -234,6 +236,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
       <el-pagination
         background
         @size-change="onPageSizeChange"
@@ -243,6 +246,7 @@
         :page-size="page.pagesize"
         :page-sizes="[5, 10, 20, 50]"
         layout="sizes, prev, pager, next, jumper"
+        style="margin-top: 20px; text-align: right"
       >
       </el-pagination>
     </el-card>
@@ -437,6 +441,41 @@ export default {
     },
   },
   methods: {
+    async sousuo() {
+      const res = await choice({
+        subjectID: this.form.learning,
+        difficulty: this.form.difficulty,
+        questionType: this.form.questionType,
+        provinces: this.form.province,
+        city: this.form.city,
+        remarks: this.form.remarks,
+        shortName: this.form.shortName,
+        direction: this.form.direction,
+        creatorID: this.form.name,
+        page: this.page.page,
+        pagesize: this.page.pagesize,
+        keyword: this.form.keywords,
+        catalogID: this.form.catalogue,
+      });
+      this.tableData = res.data.items;
+      this.page.total = res.data.counts;
+    },
+    cleanbtn() {
+      this.form = {
+        learning: "",
+        catalogue: "",
+        label: "",
+        keywords: "", // 关键词
+        questionType: "", // 试题类型
+        difficulty: "", // 难度
+        direction: "", // 方向
+        name: "", // 录入人
+        remarks: "", // 题目备注
+        shortName: "", // 企业简称
+        province: "", // 城市
+        city: "", // 地区
+      };
+    },
     close() {
       this.yulanList = {};
       this.yulanShow = false;
