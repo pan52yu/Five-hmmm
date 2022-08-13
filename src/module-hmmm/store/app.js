@@ -8,11 +8,16 @@
 
 const app = {
   state: {
-    name: ''
+    name: '',
+    current: {}
   },
   mutations: {
     SET_NAME: (state, name) => {
       state.name = name
+    },
+    currentItem: (state, payld) => {
+      state.current = payld
+      console.log(state.current)
     }
   },
   actions: {
