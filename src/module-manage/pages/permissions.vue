@@ -37,6 +37,9 @@
         <el-table-column prop="title" label="用户名" width="300">
         </el-table-column>
         <el-table-column prop="create_date" label="日期" sortable width="300">
+          <template v-slot="{ row }">
+            {{ row.create_date | parseTime("{y}-{m}-{d}") }}
+          </template>
         </el-table-column>
 
         <el-table-column align="right" label="操作" show-overflow-tooltip>
