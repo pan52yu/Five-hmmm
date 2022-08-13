@@ -1,20 +1,29 @@
 <template>
   <div class="logs">
     <el-card>
-      <el-alert title="共100条数据" type="info" show-icon></el-alert>
+      <el-alert type="info" show-icon>
+        <template>
+          共{{ total }}条数据
+        </template>
+      </el-alert>
       <el-table :header-cell-style="{
           'background-color': '#fafafa',
           'border-bottom': '2px solid #e8e8e8',
+          'text-align': 'center'
+        }" :cell-style="{
+          'text-align': 'center',
+          padding: '6px',
+          'font-size': '13px',
         }" :data="tableData" style="width: 100%">
-        <el-table-column prop="date" label="操作类型" width="280">
+        <el-table-column prop="type" label="操作类型" width="280">
         </el-table-column>
-        <el-table-column prop="date" label="操作人" width="300">
+        <el-table-column prop="reviewer" label="操作人" width="300">
         </el-table-column>
-        <el-table-column prop="date" label="执行结果" width="300">
+        <el-table-column prop="title" label="执行结果" width="300">
         </el-table-column>
-        <el-table-column prop="name" label="操作时间" width="300">
+        <el-table-column prop="display_time" label="操作时间" width="300">
         </el-table-column>
-        <el-table-column prop="address" label="描述"></el-table-column>
+        <el-table-column prop="forecast" label="描述"></el-table-column>
       </el-table>
       <!--   分页   -->
       <div class="page">
@@ -34,7 +43,7 @@
 </template>
 
 <script>
-import { list } from '@/api/base/logs'
+import { list } from '@/api/example/table'
 
 export default {
   data () {
@@ -43,10 +52,11 @@ export default {
       // 列表查询参数
       form: {
         page: 1,
-        pagesize: 10
+        pagesize: 20
       },
       // 总条数
-      total: 0
+      total: null
+
     }
   },
   created () {
@@ -59,7 +69,7 @@ export default {
         const { data } = await list(this.form)
         console.log(data)
         this.tableData = data.items
-        this.total = data.counts
+        this.total = data.total
       } catch (e) {
         this.$message.error(e.message || '获取列表失败')
       }
