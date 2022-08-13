@@ -1,8 +1,10 @@
 const path = require('path')
+const resolve = dir => path.join(__dirname, dir)
 module.exports = {
   publicPath: './',
   lintOnSave: false,
   chainWebpack: (config) => {
+    config.resolve.alias.set('@', resolve('src'))
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()
     svgRule
