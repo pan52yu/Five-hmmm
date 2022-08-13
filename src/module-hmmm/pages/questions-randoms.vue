@@ -16,7 +16,8 @@
             <el-form-item style="text-align: right">
               <el-button size="small" @click="qingchu">清除</el-button>
               <el-button type="primary" size="small" @click="sousuo"
-                >搜索</el-button
+              >搜索
+              </el-button
               >
             </el-form-item>
           </el-col>
@@ -30,7 +31,7 @@
       </el-alert>
       <!-- 表格 -->
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="id" label="编号" width="220"> </el-table-column>
+        <el-table-column prop="id" label="编号" width="220"></el-table-column>
         <el-table-column
           :formatter="tixing"
           prop="questionType"
@@ -99,23 +100,25 @@
         <el-col style="padding: 10px 0">【目录】：</el-col>
         <el-col style="padding: 10px 0">【方向】：</el-col>
       </el-row>
-      <hr />
+      <hr/>
       【题干】：
       <div>单选题 选项：（以下选中的选项为正确答案）</div>
-      <br />
+      <br/>
       <!-- <div v-for="(item, index) in optionsList" :key="index">
         <el-radio v-model="xuanxiang" :label="item.isRight">{{
           item.title
         }}</el-radio>
         <br /><br />
       </div> -->
-      <hr />
-      【参考答案】：<el-button type="danger" size="small"
-        >视频答案预览</el-button
+      <hr/>
+      【参考答案】：
+      <el-button type="danger" size="small"
+      >视频答案预览
+      </el-button
       >
-      <hr />
+      <hr/>
       【答案解析】：
-      <hr />
+      <hr/>
       【题目备注】：
       <span slot="footer">
         <el-button type="primary" @click="close">关闭</el-button>
@@ -126,6 +129,7 @@
 
 <script>
 import { randoms, removeRandoms, detail } from "@/api/hmmm/questions";
+
 export default {
   data() {
     return {
@@ -215,20 +219,25 @@ export default {
 .container {
   padding: 0 10px;
   margin: 10px 0;
+
   .el-col {
     width: 25%;
-    /deep/.el-form-item__label {
+
+    /deep/ .el-form-item__label {
       width: 80px;
     }
-    /deep/.el-form-item__content {
+
+    /deep/ .el-form-item__content {
       margin-left: 80px;
     }
   }
+
   .iconbtn {
     color: #f56c6c;
     background: #fef0f0;
     border-color: #fbc4c4;
   }
+
   .iconbtn:hover {
     background: #f56c6c;
     border-color: #f56c6c;

@@ -12,12 +12,12 @@
         :rules="rules"
         label-width="80px"
       >
-        <el-form-item label="所属学科">
+        <el-form-item v-if="!status" label="所属学科">
           <el-select
             v-model="formDate.subjectID"
             placeholder="请选择"
             style="width: 300px"
-          >
+            value="">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -46,14 +46,23 @@
 </template>
 
 <script>
-import { simple } from "../../api/hmmm/subjects";
-import { add, update } from "../../api/hmmm/directorys";
+import { simple } from "@/api/hmmm/subjects";
+import { add, update } from "@/api/hmmm/directorys";
+
 export default {
   name: "DirectorysAdd",
   props: {
+    currentId: {
+      type: Number || null,
+    },
+    status: {
+      type: Boolean,
+      default: false
+    },
     formDate: {
       type: Object,
-      default: {},
+      default: () => {
+      },
     },
     title: {
       type: String,
@@ -91,15 +100,16 @@ export default {
       // console.log(data);
       this.options = data;
     },
-
     // 确定提交表单
     async submit() {
       try {
         await this.$refs.formRef.validate();
+        if (this.status === true) {
+          this.formDate.subjectID = this.currentId
+        }
         const id = {
           id: null,
         };
-        console.log(this.formDate);
         if (this.formDate.id === null || !this.formDate.id) {
           await add({
             ...this.formDate,
@@ -110,8 +120,9 @@ export default {
           await update(this.formDate);
           await this.$message.success("修改成功");
         }
+
         this.$emit("modification");
-        this.close();
+        await this.close();
       } catch (e) {
         console.log(e);
       }

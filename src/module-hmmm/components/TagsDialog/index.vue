@@ -5,7 +5,7 @@
     :visible="dialogVisible"
     width="30%">
     <el-form :model="dialogList" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="所属学科">
+      <el-form-item v-if="!status" label="所属学科">
         <el-select v-model="dialogList.subjectID" placeholder="请选择" value="">
           <el-option v-for="item in subjectList" :key="item.id" :label="item.label" :value="item.value"></el-option>
         </el-select>
@@ -27,6 +27,13 @@ import { add, update } from '@/api/hmmm/tags'
 export default {
   name: 'TagsDialog',
   props: {
+    currentId: {
+      type: Number || null,
+    },
+    status: {
+      type: Boolean,
+      default: true
+    },
     dialogVisible: {
       type: Boolean,
       default: false
@@ -42,26 +49,29 @@ export default {
       type: Array
     }
   },
-  data () {
+  data() {
     return {
       rules: {
         name: ''
       }
     }
   },
-  created () {
+  created() {
   },
   methods: {
-    close () {
+    close() {
       this.$emit('update:dialogVisible', false)
       this.$emit('getArticles')
     },
-    async editTags () {
+    async editTags() {
       try {
         if (this.dialogList.id) {
           await update(this.dialogList)
           this.$message.success('修改成功')
         } else {
+          if (this.status === true) {
+            this.dialogList.subjectID = this.currentId
+          }
           await add({ ...this.dialogList, id: null })
           this.$message.success('新增成功')
         }

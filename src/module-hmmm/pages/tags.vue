@@ -25,8 +25,13 @@
             </el-row>
           </el-form>
         </el-col>
-        <el-col :span="2">
-          <el-button icon="el-icon-edit" type="success" @click="addSkills">新增标签</el-button>
+        <el-col :span="10">
+          <el-row type="flex" justify="end">
+            <el-link style="margin-right: 15px;" :underline="false" type="primary" v-show="status"
+                     @click="$router.back()">⬅返回学科
+            </el-link>
+            <el-button icon="el-icon-edit" type="success" @click="addSkills">新增标签</el-button>
+          </el-row>
         </el-col>
       </el-row>
       <el-alert
@@ -105,7 +110,7 @@
       </div>
     </el-card>
     <!-- 修改新增目录 -->
-    <TagsDialog @getArticles="getArticles" :subjectList="subjectList"
+    <TagsDialog :currentId="currentId" :status="status" @getArticles="getArticles" :subjectList="subjectList"
                 :dialogVisible.sync="dialogVisible" :dialogList="dialogList"
                 :title="title"></TagsDialog>
   </div>
@@ -119,7 +124,7 @@ import { simple } from '@/api/hmmm/subjects'
 export default {
   name: 'Tags',
   components: { TagsDialog },
-  data () {
+  data() {
     return {
       formData: {
         page: 1,
@@ -130,41 +135,45 @@ export default {
       dialogVisible: false,
       title: '',
       dialogList: {},
-      subjectList: []
+      subjectList: [],
+      status: false,
+      currentId: null,
     }
   },
-  created () {
+  created() {
     this.getArticles()
     this.simple()
+    this.$route.params.id ? this.currentId = this.$route.params.id : this.currentId = null;
+    this.$route.params?.status === true ? this.status = true : this.status = false
   },
   methods: {
     // 学科简单列表
-    async simple () {
+    async simple() {
       const { data } = await simple()
       console.log(data)
       this.subjectList = data
     },
     // 获取文章列表
-    async getArticles () {
+    async getArticles() {
       const { data } = await list(this.formData)
       this.tableData = data.items
       this.total = data.counts
     },
     // 修改
-    modifyArticles (row) {
+    modifyArticles(row) {
       console.log(row)
       this.title = '修改目录'
       this.dialogList = row
       this.dialogVisible = true
     },
     //  新增技巧
-    addSkills () {
+    addSkills() {
       this.title = '新增目录'
       this.dialogList = {}
       this.dialogVisible = true
     },
     // 改变状态
-    async changeState (row) {
+    async changeState(row) {
       console.log(row.state)
       console.log(row.id)
       try {
@@ -181,7 +190,7 @@ export default {
       }
     },
     // 删除
-    async delArticles (row) {
+    async delArticles(row) {
       try {
         const flag = await this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -200,22 +209,22 @@ export default {
       }
     },
     // 每页显示条数
-    handleSizeChange (newSize) {
+    handleSizeChange(newSize) {
       this.formData.pagesize = newSize
       this.getArticles()
     },
     // 分页
-    handleCurrentChange (newPage) {
+    handleCurrentChange(newPage) {
       this.formData.page = newPage
       this.getArticles()
     },
     //  清楚
-    remove () {
+    remove() {
       this.$refs.form.resetFields()
       this.getArticles()
     },
     //  搜索
-    searchArticles () {
+    searchArticles() {
       this.getArticles()
     }
   }

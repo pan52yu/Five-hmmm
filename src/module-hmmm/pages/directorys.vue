@@ -13,7 +13,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态">
-              <el-select v-model="form.state" placeholder="请选择">
+              <el-select v-model="form.state" placeholder="请选择" value="">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -31,8 +31,12 @@
             </el-form-item>
           </el-col>
           <el-row type="flex" justify="end">
+            <el-link style="margin-right: 15px;" :underline="false" type="primary" v-show="status"
+                     @click="$router.back()">⬅返回学科
+            </el-link>
             <el-button type="success" icon="el-icon-edit" @click="add"
-              >新增目录</el-button
+            >新增目录
+            </el-button
             >
           </el-row>
         </el-form>
@@ -42,6 +46,7 @@
         :title="`数据共${this.total}条`"
         type="info"
         show-icon
+        :closable="false"
         style="margin-bottom: 20px"
       >
       </el-alert>
@@ -60,7 +65,7 @@
         </el-table-column>
         <el-table-column prop="directoryName" label="目录名称" width="180">
         </el-table-column>
-        <el-table-column prop="username" label="创建者"> </el-table-column>
+        <el-table-column prop="username" label="创建者"></el-table-column>
         <el-table-column prop="addDate" label="创建日期" width="180">
           <template v-slot="{ row }">
             {{ row.addDate | parseTime("{y}-{m}-{d}") }}
@@ -77,20 +82,23 @@
         <el-table-column prop="address" label="操作">
           <template v-slot="{ row }">
             <el-button type="text" @click="open(row)" v-if="row.state === 1"
-              >禁用</el-button
+            >禁用
+            </el-button
             >
             <el-button type="text" @click="open(row)" v-else>启用</el-button>
             <el-button
               type="text"
               :disabled="row.state === 0"
               @click="edit(row)"
-              >修改</el-button
+            >修改
+            </el-button
             >
             <el-button
               type="text"
               :disabled="row.state === 0"
               @click="delItem(row.id)"
-              >删除</el-button
+            >删除
+            </el-button
             >
           </template>
         </el-table-column>
@@ -112,17 +120,20 @@
 
     <!-- 添加和编辑 弹窗组件 -->
     <DirectorysAdd
+      :status="status"
       ref="directorysAdd"
       :formDate="driectoryEdit"
       @modification="modification"
       :title="title"
+      :currentId="currentId"
     ></DirectorysAdd>
   </div>
 </template>
 
 <script>
-import { list, remove, changeState } from "../../api/hmmm/directorys";
+import { list, remove, changeState } from "@/api/hmmm/directorys";
 import DirectorysAdd from "../components/directorys-add.vue";
+
 export default {
   components: {
     DirectorysAdd,
@@ -151,10 +162,15 @@ export default {
         id: null,
       },
       title: "",
+      status: false,
+      currentId: null,
     };
   },
   created() {
     this.driectoryList();
+    console.log(this.$route);
+    this.$route.params.id ? this.currentId = this.$route.params.id : this.currentId = null;
+    this.$route.params?.status === true ? this.status = true : this.status = false
   },
   methods: {
     // 获取全部目录列表
