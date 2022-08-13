@@ -6,10 +6,8 @@
           type="success"
           icon="el-icon-edit"
           size="small"
-          @click="menusAddClick"
-        >添加菜单
-        </el-button
-        >
+          @click="menusAddClick">添加菜单
+        </el-button>
       </el-row>
       <el-table
         :header-cell-style="{

@@ -39,11 +39,13 @@ import { list } from '@/api/base/logs'
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [], // 表格数据
+      // 列表查询参数
       form: {
         page: 1,
         pagesize: 10
       },
+      // 总条数
       total: 0
     }
   },
@@ -51,6 +53,7 @@ export default {
     this.list()
   },
   methods: {
+    // 列表
     async list () {
       try {
         const { data } = await list(this.form)
