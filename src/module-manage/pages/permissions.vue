@@ -1,28 +1,32 @@
 <template>
   <div class="permissions">
     <el-card>
-      <el-row type="flex" justify="space-between">
-        <el-form ref="form" :model="formData" :rules="rules">
-          <el-form-item prop="title">
-            <el-input
-              placeholder="根据用户名搜索"
-              style="width: 250px"
-              v-model="formData.title"
-            ></el-input>
-
-            <template>
-              <el-button style="margin-left: 10px" @click="clearForm"
-                >清除</el-button
-              >
-              <el-button type="primary" @click="search">搜索</el-button>
-            </template>
-          </el-form-item>
-        </el-form>
-
-        <el-button type="success" size="mini" @click="add"
-          >新增权限组</el-button
-        >
-      </el-row>
+      <el-form ref="form" :model="formData" :rules="rules">
+        <el-form-item prop="title">
+          <el-row type="flex">
+            <el-col :span="6">
+              <el-input
+                placeholder="根据用户名搜索"
+                style="width: 250px"
+                v-model="formData.title"
+              ></el-input>
+            </el-col>
+            <el-col :span="6">
+              <template>
+                <el-button style="margin-left: 10px" @click="clearForm"
+                  >清除</el-button
+                >
+                <el-button type="primary" @click="search">搜索</el-button>
+              </template>
+            </el-col>
+            <el-col>
+              <el-row type="flex" justify="end">
+                <el-button type="success" @click="add">新增权限组</el-button>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
 
       <el-alert :title="`共${this.total}条记录`" type="info" show-icon>
       </el-alert>
@@ -32,6 +36,10 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%; margin-top: 20px"
+        :header-cell-style="{
+          'background-color': '#fafafa',
+          'border-bottom': '2px solid #e8e8e8',
+        }"
       >
         <el-table-column type="selection" width="300"> </el-table-column>
         <el-table-column prop="title" label="用户名" width="300">
@@ -82,6 +90,7 @@
       ref="permissionsAdd"
       @update="update"
       :ruleInline="ruleInline"
+      :title="title"
     ></usersAdd>
   </div>
 </template>
@@ -129,6 +138,7 @@ export default {
         children: "points",
         label: "title",
       },
+      title: "",
     };
   },
 
@@ -179,7 +189,7 @@ export default {
 
     // 新增
     async add() {
-      // this.title = "添加";
+      this.title = "创建权限组";
       this.$refs.permissionsAdd.dialogFormV();
     },
     async update() {
@@ -189,7 +199,7 @@ export default {
     // 编辑
     async editPermissions(id) {
       console.log(id);
-      // this.title = "编辑";
+      this.title = "编辑权限组";
       this.$refs.permissionsAdd.dialogFormV();
       this.$refs.permissionsAdd.hanldeEditForm(id);
     },

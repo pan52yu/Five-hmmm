@@ -1,7 +1,7 @@
 <template>
   <div class="add-form">
     <!-- <el-dialog :title="text + pageTitle" :visible.sync="dialogFormVisible"> -->
-    <el-dialog :title="`权限组`" :visible.sync="dialogFormVisible">
+    <el-dialog :title="`${title}`" :visible.sync="dialogFormVisible">
       <el-form
         :rules="ruleInline"
         ref="dataForm"
@@ -41,7 +41,7 @@ import { list } from "@/api/base/menus.js";
 let _this = [];
 export default {
   name: "usersAdd",
-  props: ["text", "pageTitle", "ruleInline"],
+  props: ["title", "pageTitle", "ruleInline"],
   data() {
     return {
       dialogFormVisible: false,
