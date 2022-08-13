@@ -9,8 +9,10 @@
                 placeholder="请输入"
                 v-model="formRef.tags"
                 style="width: 230px"
-              ></el-input> </el-form-item
-          ></el-col>
+              ></el-input>
+            </el-form-item
+            >
+          </el-col>
           <el-col :span="6">
             <el-form-item label="城市">
               <el-select
@@ -25,8 +27,10 @@
                   :value="item"
                 >
                 </el-option>
-              </el-select> </el-form-item
-          ></el-col>
+              </el-select>
+            </el-form-item
+            >
+          </el-col>
           <el-col :span="6">
             <el-form-item label="地区">
               <el-select v-model="formRef.province" placeholder="请选择">
@@ -37,15 +41,19 @@
                   :value="item"
                 >
                 </el-option>
-              </el-select> </el-form-item
-          ></el-col>
+              </el-select>
+            </el-form-item
+            >
+          </el-col>
           <el-col :span="6">
             <el-form-item label="企业简称">
               <el-input
                 v-model="formRef.shortName"
                 style="width: 240px"
-              ></el-input> </el-form-item
-          ></el-col>
+              ></el-input>
+            </el-form-item
+            >
+          </el-col>
         </el-row>
 
         <el-row>
@@ -78,7 +86,8 @@
               icon="el-icon-edit"
               size="mini"
               @click="add"
-              >新增用户</el-button
+            >新增用户
+            </el-button
             >
           </el-row>
         </el-row>
@@ -104,7 +113,7 @@
         </el-table-column>
         <el-table-column prop="number" label="企业编号" width="150">
         </el-table-column>
-        <el-table-column prop="shortName" label="企业简称"> </el-table-column>
+        <el-table-column prop="shortName" label="企业简称"></el-table-column>
         <el-table-column prop="tags" label="标签" width="150">
         </el-table-column>
         <el-table-column prop="creatorID" label="创建者" width="80">
@@ -191,40 +200,41 @@
 </template>
 
 <script>
-import { list, remove, disabled } from "../../api/hmmm/companys";
-import { regionDataPlus } from "element-china-area-data";
-import CompanysAdd from "../components/compinysAdd.vue";
-import { citys, provinces } from "../../api/hmmm/citys";
+import { list, remove, disabled } from '../../api/hmmm/companys'
+import { regionDataPlus } from 'element-china-area-data'
+import CompanysAdd from '../components/compinysAdd.vue'
+import { citys, provinces } from '../../api/hmmm/citys'
+
 export default {
   components: {
-    CompanysAdd,
+    CompanysAdd
   },
-  data() {
+  data () {
     return {
       formRef: {
-        tags: "",
-        city: "",
-        province: "",
-        shortName: "",
-        state: "",
+        tags: '',
+        city: '',
+        province: '',
+        shortName: '',
+        state: '',
         page: 1,
-        pagesize: 10,
+        pagesize: 10
       },
       tableData: [],
       page: {
         page: 1,
-        pagesize: 10,
+        pagesize: 10
       },
       total: 0,
       options: [
         {
           value: 1,
-          label: "启用",
+          label: '启用'
         },
         {
           value: 2,
-          label: "停用",
-        },
+          label: '停用'
+        }
       ],
       citys: regionDataPlus,
       selectedOptions: [],
@@ -239,105 +249,106 @@ export default {
         // tags: "",
         // remarks: "",
       },
-      title: "",
-    };
+      title: ''
+    }
   },
 
-  created() {
-    this.companyList();
+  created () {
+    this.companyList()
     // 获取城市
-    this.optionsProvinces = provinces();
+    this.optionsProvinces = provinces()
     // console.log(provinces());
   },
 
   methods: {
     // 获取企业管理列表
-    async companyList() {
-      const { data } = await list(this.page);
+    async companyList () {
+      const { data } = await list(this.page)
       // console.log(res);
-      this.tableData = data.items;
+      this.tableData = data.items
       // console.log(this.tableData);
-      this.total = data.counts;
+      this.total = data.counts
     },
-    handleSizeChange(newSize) {
-      this.tableData.pagesize = newSize;
-      this.companyList();
+    handleSizeChange (newSize) {
+      this.tableData.pagesize = newSize
+      this.companyList()
     },
-    handleCurrentChange(newPage) {
-      this.tableData.page = newPage;
-      this.companyList();
+    handleCurrentChange (newPage) {
+      this.tableData.page = newPage
+      this.companyList()
     },
 
     // 删除
-    async delItem(id) {
+    async delItem (id) {
       try {
-        await this.$confirm("此操作将永久删除用户，是否继续？", "提示");
+        await this.$confirm('此操作将永久删除用户，是否继续？', '提示')
         await remove({
           ...id,
-          id,
-        });
-        this.$message.success("删除成功");
-        this.companyList();
+          id
+        })
+        this.$message.success('删除成功')
+        this.companyList()
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
     },
 
     // 新增
-    add() {
-      this.$refs.addCompanys.dialogFormVisible = true;
-      this.title = "创建用户";
+    add () {
+      this.companysId = {}
+      this.$refs.addCompanys.dialogFormVisible = true
+      this.title = '创建用户'
     },
 
     // 编辑
-    edit(row) {
-      this.$refs.addCompanys.dialogFormVisible = true;
-      this.companysId = row;
-      this.title = "编辑用户";
+    edit (row) {
+      this.$refs.addCompanys.dialogFormVisible = true
+      this.companysId = row
+      this.title = '编辑用户'
     },
 
     // 子传父 通知父组件重新渲染页面
-    async newDataes() {
-      await this.companyList();
+    async newDataes () {
+      await this.companyList()
     },
 
     // 清除
-    async clear() {
-      await this.$refs.form.resetFields();
-      await this.companyList();
+    async clear () {
+      await this.$refs.form.resetFields()
+      await this.companyList()
     },
     // 搜索
-    async search() {
-      const { data } = await list(this.formRef);
-      console.log(data);
-      this.tableData = data.items;
+    async search () {
+      const { data } = await list(this.formRef)
+      console.log(data)
+      this.tableData = data.items
     },
 
     // 改变开启 / 禁用 状态
-    async open(row) {
+    async open (row) {
       await this.$confirm(
-        `已成功${row.state === 0 ? "启用" : "禁用"},是否继续?`,
-        "提示"
-      );
-      console.log(row);
+        `已成功${row.state === 0 ? '启用' : '禁用'},是否继续?`,
+        '提示'
+      )
+      console.log(row)
       const data = {
         id: row.id,
-        state: row.state === 0 ? 1 : 0,
-      };
-      await disabled(data);
-      await this.companyList();
+        state: row.state === 0 ? 1 : 0
+      }
+      await disabled(data)
+      await this.companyList()
       await this.$message.success(
-        `已成功${row.state === 0 ? "启用" : "禁用"}标签`
-      );
+        `已成功${row.state === 0 ? '启用' : '禁用'}标签`
+      )
     },
 
     // 获取地区
-    changeCitys() {
-      this.optionsCitys = citys(this.formRef.city);
-      console.log(citys(this.formRef.city));
-    },
-  },
-};
+    changeCitys () {
+      this.optionsCitys = citys(this.formRef.city)
+      console.log(citys(this.formRef.city))
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">

@@ -26,7 +26,7 @@
             @keyup.enter="handleFilter"
             @change="handleProvince"
             filterable
-          >
+            value="">
             <el-option
               v-for="item in province"
               :key="item"
@@ -64,33 +64,34 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="close">{{ $t("table.cancel") }}</el-button>
         <el-button type="primary" @click="submit">{{
-          $t("table.confirm")
-        }}</el-button>
+            $t("table.confirm")
+          }}
+        </el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { provinces, citys } from "@/api/hmmm/citys.js";
-import { add, update } from "../../api/hmmm/companys";
+import { provinces, citys } from '@/api/hmmm/citys.js'
+import { add, update } from '@/api/hmmm/companys'
+
 export default {
   props: {
     formBase: {
       type: Object,
-      default: () => {},
+      default: () => {
+      }
     },
     title: {
-      type: String,
-    },
+      type: String
+    }
   },
-  data() {
+  data () {
     return {
       dialogFormVisible: false,
-
       province: [],
       cityDate: [],
-
       // formBase: {
       //   shortName: "",
       //   isFamous: "",
@@ -103,65 +104,67 @@ export default {
       // 表单验证
       ruleInline: {
         shortName: [
-          { required: true, message: "企业简称不能为空", trigger: "blur" },
+          { required: true, message: '企业简称不能为空', trigger: 'blur' }
         ],
         province: [
-          { required: true, message: "请选择省份", trigger: "change" },
+          { required: true, message: '请选择省份', trigger: 'change' }
         ],
-        tags: [{ required: true, message: "请请输标签", trigger: "blur" }],
-      },
-    };
+        tags: [{ required: true, message: '请请输标签', trigger: 'blur' }]
+      }
+    }
   },
 
-  created() {
-    this.province = provinces(); //获取到城市
+  created () {
+    this.province = provinces() // 获取到城市
   },
 
   methods: {
     // 获取省市区
-    handleProvince() {
-      this.cityDate = citys(this.formBase.province);
+    handleProvince () {
+      this.cityDate = citys(this.formBase.province)
     },
     // 取消
-    close() {
-      this.$refs["dataForm"].resetField();
-      this.dialogFormVisible = false;
+    close () {
+      this.$refs.dataForm.resetFields()
+      this.dialogFormVisible = false
     },
     // 确认
-    async submit() {
+    async submit () {
       try {
-        this.$refs.dataForm.validate();
+        await this.$refs.dataForm.validate()
         if (!this.formBase.id) {
           this.formBase.isFamous
             ? (this.formBase.isFamous = false)
-            : (this.formBase.isFamous = true);
-          await add(this.formBase);
-          await this.$message.success("新增成功");
+            : (this.formBase.isFamous = true)
+          await add(this.formBase)
+          await this.$message.success('新增成功')
         } else {
-          delete this.formBase.userName;
+          delete this.formBase.userName
           this.formBase.isFamous === 1
             ? (this.formBase.isFamous = true)
-            : (this.formBase.isFamous = false);
-          await update(this.formBase);
-          await this.$message.success("编辑成功");
+            : (this.formBase.isFamous = false)
+          await update(this.formBase)
+          await this.$message.success('编辑成功')
         }
-        this.close();
-        this.$emit("newDataes");
+        this.close()
+        this.$emit('newDataes')
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">
 .el-form--label-left .el-form-item__label {
   text-align: right;
 }
+
 .el-form-item--medium {
   margin-bottom: 22px;
 }
+
 .el-dialog__footer {
   text-align: center;
 }
