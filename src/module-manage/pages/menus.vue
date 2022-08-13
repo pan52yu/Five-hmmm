@@ -61,28 +61,28 @@
       <el-form
         ref="formRef"
         :rules="formRules"
-        :model="tableData"
+        :model="addtableData"
         label-width="100px"
       >
         <el-form-item label="权限组名称">
-          <el-radio-group v-model="tableData.is_point">
+          <el-radio-group v-model="addtableData.is_point">
             <el-radio label="菜单"></el-radio>
             <el-radio label="权限点"></el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="活动区域">
-          <el-select v-model="tableData.region">
-            <el-option label="区域一" value="shanghai">主导航</el-option>
+          <el-select v-model="addtableData.region">
+            <el-option label="主导航" :value="0">主导航</el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="权限代码" prop="code">
-          <el-input v-model="tableData.code"></el-input>
+          <el-input v-model="addtableData.code"></el-input>
         </el-form-item>
         <el-form-item label="权限标题" prop="title">
-          <el-input v-model="tableData.title"></el-input>
+          <el-input v-model="addtableData.title"></el-input>
         </el-form-item>
       </el-form>
       <el-row type="flex" justify="end">
@@ -100,6 +100,7 @@ export default {
   name: 'Menus',
   data () {
     return {
+      addtableData: {},
       dialogShow: false,
       tableData: [],
       formRules: {
@@ -143,7 +144,9 @@ export default {
     },
     // 编辑用户
     edit (row) {
-      console.log('我要编辑用户')
+      console.log(row)
+      this.addtableData = row
+      this.dialogShow = true
     },
     // 删除用户
     async remove (row) {
