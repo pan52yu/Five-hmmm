@@ -5,7 +5,8 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const instance = axios.create({
-  baseURL: 'http://hmmm-api.itheima.net', // api的base_url
+  baseURL: process.env.NODE_ENV === 'developement' ? 'http://localhost:7001/' : 'http://hmmm-api.itheima.net',
+  // baseURL: 'http://hmmm-api.itheima.net', // api的base_url
   timeout: 5000 // request timeout
 })
 

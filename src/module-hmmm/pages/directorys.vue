@@ -234,12 +234,16 @@ export default {
 
     // 改变状态  已启用/已禁用
     async open(row) {
-      const data = {
-        id: row.id,
-        state: row.state === 1 ? 0 : 1,
-      };
-      await changeState(data);
-      await this.driectoryList();
+      try {
+        const data = {
+          id: row.id,
+          state: row.state === 1 ? 0 : 1,
+        };
+        await changeState(data);
+        row.state = row.state === 1 ? 0 : 1;
+      } catch (e) {
+        console.log(e)
+      }
     },
   },
 };

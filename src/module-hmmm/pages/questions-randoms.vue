@@ -51,13 +51,13 @@
             </a>
           </template>
         </el-table-column>
-        <el-table-column prop="addTime" label="录入时间" width="180">
+        <el-table-column prop="addTime" label="录入时间">
         </el-table-column>
-        <el-table-column prop="totalSeconds" label="答题时间(s)" width="157">
+        <el-table-column prop="totalSeconds" label="答题时间(s)">
         </el-table-column>
-        <el-table-column prop="accuracyRate" label="正确率(%)" width="157">
+        <el-table-column prop="accuracyRate" label="正确率(%)">
         </el-table-column>
-        <el-table-column prop="userName" label="录入人" width="157">
+        <el-table-column prop="userName" label="录入人">
         </el-table-column>
         <el-table-column label="操作" width="80">
           <template v-slot="{ row }">

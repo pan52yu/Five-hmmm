@@ -9,3 +9,8 @@ export default {
   name: 'App'
 }
 </script>
+<style lang="less" scoped>
+#app {
+  min-width: 1200px;
+}
+</style>
