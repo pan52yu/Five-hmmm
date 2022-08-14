@@ -144,7 +144,7 @@ export default {
     this.getArticles()
     this.simple()
     this.$route.params.id ? this.currentId = this.$route.params.id : this.currentId = null;
-    this.$route.params?.status === true ? this.status = true : this.status = false
+    this.$route.params?.status === 'true' ? this.status = true : this.status = false
   },
   methods: {
     // 学科简单列表

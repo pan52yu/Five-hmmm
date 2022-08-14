@@ -170,7 +170,7 @@ export default {
     this.driectoryList();
     console.log(this.$route);
     this.$route.params.id ? this.currentId = this.$route.params.id : this.currentId = null;
-    this.$route.params?.status === true ? this.status = true : this.status = false
+    this.$route.params?.status === 'true' ? this.status = true : this.status = false
   },
   methods: {
     // 获取全部目录列表
